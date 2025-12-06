@@ -5,7 +5,7 @@ import useAuth from '../../Hooks/useAuth';
 import SocialLogin from './SocialLogin';
 
 const Login = () => {
-    const {signInUser} = useAuth()
+    const { signInUser } = useAuth()
     const location = useLocation()
     // console.log(location)
     const navigate = useNavigate()
@@ -18,65 +18,90 @@ const Login = () => {
     const handleLogin = (data) => {
         // console.log('Login payload:', data);
         signInUser(data.email, data.password)
-        .then(result => {
-            console.log(result.user)
-            navigate(location?.state || '/')
-        })
-        .catch(error=> console.log(error.message))
+            .then(result => {
+                console.log(result.user)
+                navigate(location?.state || '/')
+            })
+            .catch(error => console.log(error.message))
     };
     return (
-        <div className='shadow-2xl mt-8 p-10'>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
             <title>Login</title>
-            <div>
-                <h3 className="text-3xl font-bold text-center">Welcome Back to Digital Life Lesson</h3>
-                <p className="my-6 text-center">New to our website? Please {' '} <Link state={location.state} to='/auth/register' className='text-blue-500 underline'>Register</Link></p>
-                <form onSubmit={handleSubmit(handleLogin)}>
-                    <fieldset className="fieldset ">
 
-                        {/* Email */}
-                        <label className="label">Email</label>
+            <div className="w-full max-w-md bg-gray-800/50 backdrop-blur-lg shadow-2xl rounded-2xl p-8 border border-gray-700">
+                <h3 className="text-3xl font-extrabold text-center text-white">
+                    Welcome Back 👋
+                </h3>
+                <p className="my-4 text-center text-gray-300">
+                    New here?{" "}
+                    <Link
+                        state={location.state}
+                        to="/auth/register"
+                        className="text-blue-400 hover:underline"
+                    >
+                        Create an Account
+                    </Link>
+                </p>
+
+                <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
+                    {/* Email */}
+                    <div>
+                        <label className="label text-gray-300">Email</label>
                         <input
                             type="email"
-                            {...register('email', { required: 'Email is required' })}
-                            className="input w-full"
-                            placeholder="Email"
+                            {...register("email", { required: "Email is required" })}
+                            className="input input-bordered w-full bg-gray-700 text-white border-gray-600"
+                            placeholder="Enter your email"
                         />
                         {errors.email && (
-                            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                            <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>
                         )}
+                    </div>
 
-                        {/* Password */}
-                        <label className="label mt-4">Password</label>
+                    {/* Password */}
+                    <div>
+                        <label className="label text-gray-300">Password</label>
                         <input
                             type="password"
-                            {...register('password', {
-                                required: 'Password is required',
+                            {...register("password", {
+                                required: "Password is required",
                                 minLength: {
                                     value: 6,
-                                    message: 'Password must be at least 6 characters',
+                                    message: "Password must be at least 6 characters",
                                 },
                                 pattern: {
-                                    // at least one uppercase, one digit, one special char
-                                    value: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?]).+$/,
+                                    value:
+                                        /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?]).+$/,
                                     message:
-                                        'Password must include 1 uppercase letter, 1 number and 1 special character',
+                                        "Must have 1 uppercase, 1 number & 1 special character",
                                 },
                             })}
-                            className="input w-full"
-                            placeholder="Password"
+                            className="input input-bordered w-full bg-gray-700 text-white border-gray-600"
+                            placeholder="Enter your password"
                         />
                         {errors.password && (
-                            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                            <p className="text-red-400 text-sm mt-1">
+                                {errors.password.message}
+                            </p>
                         )}
-                        <div><a className="link link-hover">Forgot password?</a></div>
+                    </div>
 
-                        <button className="btn btn-neutral mt-4">Login</button>
-                    </fieldset>
-                    <SocialLogin></SocialLogin>
+                    <div className="text-right">
+                        <a className="text-blue-400 hover:underline text-sm cursor-pointer">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <button className="btn btn-primary w-full mt-2">Login</button>
+
+                    <div className="mt-3">
+                        <SocialLogin />
+                    </div>
                 </form>
             </div>
         </div>
     );
+
 };
 
 export default Login;
