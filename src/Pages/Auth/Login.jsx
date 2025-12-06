@@ -28,7 +28,7 @@ const Login = () => {
         <div className='shadow-2xl mt-8 p-10'>
             <title>Login</title>
             <div>
-                <h3 className="text-3xl font-bold text-center">Welcome Back to Zab Shift</h3>
+                <h3 className="text-3xl font-bold text-center">Welcome Back to Digital Life Lesson</h3>
                 <p className="my-6 text-center">New to our website? Please {' '} <Link state={location.state} to='/auth/register' className='text-blue-500 underline'>Register</Link></p>
                 <form onSubmit={handleSubmit(handleLogin)}>
                     <fieldset className="fieldset ">

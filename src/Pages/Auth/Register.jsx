@@ -82,7 +82,7 @@ const Register = () => {
   return (
     <div className='shadow-2xl mt-8 p-10'>
       <title>Registration</title>
-      <h3 className="text-3xl text-center font-bold">Welcome to Zab Shift Registration</h3>
+      <h3 className="text-3xl text-center font-bold">Welcome to Digital Lesson Registration</h3>
       <p className="text-center my-2">
         Already have an account? Please{' '}
         <Link state={location.state} to="/auth/login" className='text-blue-500 underline'>
