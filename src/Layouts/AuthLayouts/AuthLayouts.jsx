@@ -1,9 +1,9 @@
 import React from 'react';
-import { Outlet } from 'react-router';
 import Navbar from '../../Component/Header/Navbar';
+import { Outlet } from 'react-router';
 import Footer from '../../Component/Footer/Footer';
 
-const HomeLayouts = () => {
+const AuthLayouts = () => {
     return (
         <div>
             <Navbar></Navbar>
@@ -13,4 +13,4 @@ const HomeLayouts = () => {
     );
 };
 
-export default HomeLayouts;
+export default AuthLayouts;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-
 import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
 import SocialLogin from './SocialLogin';
@@ -30,7 +29,7 @@ const Login = () => {
             <title>Login</title>
             <div>
                 <h3 className="text-3xl font-bold text-center">Welcome Back to Zab Shift</h3>
-                <p className="my-6 text-center">New to our website? Please {' '} <Link state={location.state} to='/register' className='text-blue-500 underline'>Register</Link></p>
+                <p className="my-6 text-center">New to our website? Please {' '} <Link state={location.state} to='/auth/register' className='text-blue-500 underline'>Register</Link></p>
                 <form onSubmit={handleSubmit(handleLogin)}>
                     <fieldset className="fieldset ">
 
