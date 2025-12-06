@@ -4,11 +4,13 @@ import Home from "../Pages/Home/Home";
 import AuthLayouts from "../Layouts/AuthLayouts/AuthLayouts";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
+import Error from "../Component/Error"
 
 export const router = createBrowserRouter([
     {
         path: "/",
         Component: HomeLayouts,
+        errorElement:<Error></Error>,
         children: [
             {
                 index: true,
