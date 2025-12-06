@@ -1,0 +1,70 @@
+import React from "react";
+import Slider from "react-slick";
+import { Link } from "react-router";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+
+const HeroSlider = () => {
+  const settings = {
+    dots: true,           // show navigation dots
+    infinite: true,       // loop slides
+    speed: 800,           // slide transition speed
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,       // auto slide
+    autoplaySpeed: 5000,  // 5 seconds per slide
+    pauseOnHover: true,
+  };
+
+  const slides = [
+    {
+      title: "Learn Modern Web Development",
+      subtitle: "Master React, Node.js, and more with practical lessons.",
+      buttonText: "Get Started",
+      buttonLink: "/public-lessons",
+      bgImage: "https://source.unsplash.com/1600x600/?programming,coding",
+    },
+    {
+      title: "Build Real Projects",
+      subtitle: "Hands-on projects to improve your portfolio and skills.",
+      buttonText: "Explore Projects",
+      buttonLink: "/projects",
+      bgImage: "https://source.unsplash.com/1600x600/?computer,code",
+    },
+    {
+      title: "Upgrade Your Skills",
+      subtitle: "Join our premium plans for exclusive lessons and mentorship.",
+      buttonText: "See Pricing",
+      buttonLink: "/pricing",
+      bgImage: "https://source.unsplash.com/1600x600/?technology,learning",
+    },
+  ];
+
+  return (
+    <div className="relative">
+      <Slider {...settings}>
+        {slides.map((slide, index) => (
+          <div key={index} className="h-[500px] relative">
+            <img
+              src={slide.bgImage}
+              alt={slide.title}
+              className="w-full h-[500px] object-cover brightness-75"
+            />
+            <div className="absolute inset-0 flex flex-col justify-center items-start px-10 md:px-20 text-white">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">{slide.title}</h2>
+              <p className="mb-6 text-lg md:text-xl">{slide.subtitle}</p>
+              <Link
+                to={slide.buttonLink}
+                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold transition"
+              >
+                {slide.buttonText}
+              </Link>
+            </div>
+          </div>
+        ))}
+      </Slider>
+    </div>
+  );
+};
+
+export default HeroSlider;

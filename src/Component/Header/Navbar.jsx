@@ -6,7 +6,7 @@ const Navbar = () => {
     const { user, logOut } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const handleLogOut = () => logOut().catch(() => {});
+    const handleLogOut = () => logOut().catch(() => { });
 
     // Active route + drop shadow for readability
     const linkStyle = ({ isActive }) =>
@@ -22,9 +22,15 @@ const Navbar = () => {
                 <>
                     <li><NavLink to="/dashboard/add-lesson" className={linkStyle}>Add Lesson</NavLink></li>
                     <li><NavLink to="/dashboard/my-lessons" className={linkStyle}>My Lessons</NavLink></li>
-                    <li><NavLink to="/pricing" className={linkStyle}>Pricing / Upgrade</NavLink></li>
                 </>
             )}
+            {user && !user.isPremium && (
+                <li><NavLink to="/pricing" className={linkStyle}>Pricing / Upgrade</NavLink></li>
+            )}
+            {user?.isPremium && (
+                <span className="ml-2 font-semibold text-yellow-500">Premium ⭐</span>
+            )}
+
         </>
     );
 
@@ -35,9 +41,9 @@ const Navbar = () => {
                 <div className="dropdown">
                     <label tabIndex={0} className="btn btn-ghost lg:hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor">
+                            viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                  d="M4 6h16M4 12h16M4 18h16"/>
+                                d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </label>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content bg-white/70 backdrop-blur-md rounded-box z-10 mt-3 w-52 p-2 shadow">
