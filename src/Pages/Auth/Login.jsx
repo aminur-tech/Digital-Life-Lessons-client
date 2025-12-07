@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
 import SocialLogin from './SocialLogin';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 const Login = () => {
-    const { signInUser } = useAuth()
-    const location = useLocation()
-    // console.log(location)
-    const navigate = useNavigate()
+    const { signInUser } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -16,14 +18,14 @@ const Login = () => {
     } = useForm();
 
     const handleLogin = (data) => {
-        // console.log('Login payload:', data);
         signInUser(data.email, data.password)
             .then(result => {
-                console.log(result.user)
-                navigate(location?.state || '/')
+                console.log(result.user);
+                navigate(location?.state || '/');
             })
-            .catch(error => console.log(error.message))
+            .catch(error => console.log(error.message));
     };
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
             <title>Login</title>
@@ -59,10 +61,10 @@ const Login = () => {
                     </div>
 
                     {/* Password */}
-                    <div>
+                    <div className="relative">
                         <label className="label text-gray-300">Password</label>
                         <input
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             {...register("password", {
                                 required: "Password is required",
                                 minLength: {
@@ -76,13 +78,17 @@ const Login = () => {
                                         "Must have 1 uppercase, 1 number & 1 special character",
                                 },
                             })}
-                            className="input input-bordered w-full bg-gray-700 text-white border-gray-600"
+                            className="input input-bordered w-full bg-gray-700 text-white border-gray-600 pr-10"
                             placeholder="Enter your password"
                         />
+                        <span
+                            className="absolute right-3 top-9 text-gray-400 cursor-pointer"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+                        </span>
                         {errors.password && (
-                            <p className="text-red-400 text-sm mt-1">
-                                {errors.password.message}
-                            </p>
+                            <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
                         )}
                     </div>
 
@@ -101,7 +107,6 @@ const Login = () => {
             </div>
         </div>
     );
-
 };
 
 export default Login;

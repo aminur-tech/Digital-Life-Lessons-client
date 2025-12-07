@@ -18,79 +18,54 @@ import AdminProfile from "../Pages/Dashboard/AdminDashboard/AdminProfile";
 import ReportedLessons from "../Pages/Dashboard/AdminDashboard/ReportedLessons";
 import ManageLessons from "../Pages/Dashboard/AdminDashboard/ManageLessons";
 import ManageUsers from "../Pages/Dashboard/AdminDashboard/ManageUsers";
+import PricingPage from "../Pages/Pricing/PricingPage";
+import PaymentSuccess from "../Pages/Pricing/PaymentSuccess";
+import PaymentCancel from "../Pages/Pricing/PaymentCancel";
+import PrivateRoutes from "./PrivateRoutes";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
-    {
-        path: "/",
-        Component: HomeLayouts,
-        errorElement: <Error></Error>,
-        children: [
-            {
-                index: true,
-                path: '/',
-                Component: Home
-            }
-        ]
-    },
-    {
-        path: '/auth',
-        Component: AuthLayouts,
-        children: [
-            {
-                path: 'login',
-                Component: Login
-            },
-            {
-                path: 'register',
-                Component: Register
-            }
-        ]
-    },
-    {
-    path: "/dashboard",
-    element: <DashboardLayout></DashboardLayout>,
+  {
+    path: "/",
+    element: <HomeLayouts />,
+    errorElement: <Error />,
     children: [
-      // USER DASHBOARD
-      { index:true, element: <DashboardHome /> },
+      { index: true, element: <Home /> },
+    ],
+  },
+  {
+    path: "/auth",
+    element: <AuthLayouts />,
+    children: [
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <PrivateRoutes><DashboardLayout /></PrivateRoutes>,
+    children: [
+      // User Dashboard
+      { index: true, element: <DashboardHome /> },
       { path: "add-lesson", element: <AddLesson /> },
       { path: "my-lessons", element: <MyLessons /> },
       { path: "my-lessons/update/:id", element: <UpdateLesson /> },
       { path: "my-favorites", element: <MyFavorites /> },
       { path: "profile", element: <UserProfile /> },
 
-      // ADMIN DASHBOARD
-      {
-        path: "admin",
-        element: (
-            <AdminHome />
-        ),
-      },
-      {
-        path: "admin/manage-users",
-        element: (
-            <ManageUsers />
-        ),
-      },
-      {
-        path: "admin/manage-lessons",
-        element: (
-            <ManageLessons />
-          
-        ),
-      },
-      {
-        path: "admin/reported-lessons",
-        element: (
-            <ReportedLessons />
-        ),
-      },
-      {
-        path: "admin/profile",
-        element: (
-            <AdminProfile />
-        ),
-      },
+      // Pricing
+      { path: "pricing", element: <PricingPage /> },
+      { path: "payment-success", element: <PaymentSuccess /> },
+      { path: "payment-cancel", element: <PaymentCancel /> },
+
+      // Admin Dashboard
+      { path: "admin", element: <AdminRoute><AdminHome /></AdminRoute> },
+      { path: "admin/manage-users", element: <AdminRoute><ManageUsers /></AdminRoute> },
+      { path: "admin/manage-lessons", element: <AdminRoute><ManageLessons /></AdminRoute> },
+      { path: "admin/reported-lessons", element: <AdminRoute><ReportedLessons /></AdminRoute> },
+      { path: "admin/profile", element: <AdminRoute><AdminProfile /></AdminRoute> },
     ],
   },
 ]);
+
 

@@ -25,7 +25,7 @@ const Navbar = () => {
                 </>
             )}
             {user && !user.isPremium && (
-                <li><NavLink to="/pricing" className={linkStyle}>Pricing / Upgrade</NavLink></li>
+                <li><NavLink to="/dashboard/pricing" className={linkStyle}>Pricing / Upgrade</NavLink></li>
             )}
             {user?.isPremium && (
                 <span className="ml-2 font-semibold text-yellow-500">Premium ⭐</span>
@@ -56,7 +56,7 @@ const Navbar = () => {
                         )}
                     </ul>
                 </div>
-                <Link to="/" className="btn btn-ghost text-xl">EduLearn</Link>
+                <Link to="/"><img src="https://i.ibb.co.com/5WQymhQv/images-removebg-preview.png" alt="" className='w-15 rounded-full' /></Link>
             </div>
 
             {/* CENTER (Desktop menu) */}
@@ -84,8 +84,8 @@ const Navbar = () => {
                             <div className="absolute right-0 mt-3 w-48 bg-white/80 backdrop-blur-lg shadow-lg rounded-xl p-3 z-20">
                                 <p className="font-semibold">{user?.displayName}</p>
                                 <div className="divider my-1"></div>
-                                <Link className="block py-1" to="/profile">Profile</Link>
-                                <Link className="block py-1" to="/dashboard">Dashboard</Link>
+                                <Link className="block py-1 btn" to="/profile">Profile</Link>
+                                <Link className="block py-1 btn" to="/dashboard">Dashboard</Link>
                                 <button
                                     onClick={handleLogOut}
                                     className="btn btn-sm btn-outline w-full mt-2"

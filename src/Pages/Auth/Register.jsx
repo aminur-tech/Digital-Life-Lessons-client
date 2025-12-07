@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../Hooks/useAuth';
 import SocialLogin from './SocialLogin';
 import { Link, useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 const Register = () => {
   const { createUser, updateUserProfile } = useAuth();
@@ -12,7 +13,9 @@ const Register = () => {
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
-  const [regError, setRegError] = React.useState('');
+  const [regError, setRegError] = useState('');
+  const [regSuccess, setRegSuccess] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -21,25 +24,21 @@ const Register = () => {
   } = useForm();
 
   const handleRegister = (data) => {
-    setRegError(''); // clear previous error
+    setRegError('');
+    setRegSuccess('');
 
     const photoImg = data.photo[0];
 
-    // STEP 1: Create Firebase User
     createUser(data.email, data.password)
       .then(result => {
-        console.log("User created:", result);
+        console.log(result)
 
-        // STEP 2: Upload Image
+        // Upload image
         const formData = new FormData();
         formData.append('image', photoImg);
-
         const Img_Api_Url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Img_Upload}`;
-
         return axios.post(Img_Api_Url, formData);
       })
-
-      // STEP 3: Image uploaded → Store user in DB
       .then(res => {
         const imageUrl = res.data.data.url;
 
@@ -51,26 +50,16 @@ const Register = () => {
 
         return axiosSecure.post('/users', userinfo).then(() => imageUrl);
       })
-
-      // STEP 4: Update user profile
       .then((imageUrl) => {
-        const userProfile = {
-          displayName: data.name,
-          photoURL: imageUrl,
-        };
-
+        const userProfile = { displayName: data.name, photoURL: imageUrl };
         return updateUserProfile(userProfile);
       })
-
-      // STEP 5: Navigate after success
       .then(() => {
+        setRegSuccess('Registration successful! 🎉');
         navigate(location?.state || '/');
       })
-
       .catch(error => {
         console.log("Register error:", error);
-
-        // Firebase email error
         if (error.code === 'auth/email-already-in-use') {
           setRegError('Email already registered. Please use another email.');
         } else {
@@ -106,8 +95,14 @@ const Register = () => {
           </p>
         )}
 
-        <form onSubmit={handleSubmit(handleRegister)} className="space-y-4">
+        {/* Success Message */}
+        {regSuccess && (
+          <p className="text-green-400 text-center font-medium mb-4">
+            {regSuccess}
+          </p>
+        )}
 
+        <form onSubmit={handleSubmit(handleRegister)} className="space-y-4">
           {/* Name */}
           <div>
             <label className="label text-gray-300">Full Name</label>
@@ -137,10 +132,10 @@ const Register = () => {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
             <label className="label text-gray-300">Password</label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               {...register("password", {
                 required: "Password is required",
                 minLength: { value: 6, message: "At least 6 characters" },
@@ -151,13 +146,17 @@ const Register = () => {
                     "Must include uppercase, number & special character",
                 },
               })}
-              className="input input-bordered w-full bg-gray-700 border-gray-600 text-white"
+              className="input input-bordered w-full bg-gray-700 border-gray-600 text-white pr-10"
               placeholder="Create Password"
             />
+            <span
+              className="absolute right-3 top-9 text-gray-400 cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+            </span>
             {errors.password && (
-              <p className="text-red-400 text-sm mt-1">
-                {errors.password.message}
-              </p>
+              <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
             )}
           </div>
 
@@ -183,7 +182,6 @@ const Register = () => {
       </div>
     </div>
   );
-
 };
 
 export default Register;
