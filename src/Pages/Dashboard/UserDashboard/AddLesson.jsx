@@ -4,9 +4,11 @@ import toast from "react-hot-toast";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import axios from "axios";
+import useRole from "../../../Hooks/useRole";
 
 const AddLesson = () => {
-  const { user, role } = useAuth();
+  const { user} = useAuth();
+  const {role}= useRole()
   const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, reset } = useForm();
   const [image, setImage] = useState(null);
@@ -27,7 +29,7 @@ const AddLesson = () => {
 
       const lessonData = {
         ...data,
-        author: user.email,
+        email: user.email,
         image: imageUrl, // send the URL, not the File object
         createdAt: new Date(),
       };
