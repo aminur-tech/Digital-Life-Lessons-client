@@ -18,25 +18,25 @@ const HeroSlider = () => {
 
   const slides = [
     {
-      title: "Learn Modern Web Development",
-      subtitle: "Master React, Node.js, and more with practical lessons.",
+      title: "Learn Lessons",
+      subtitle: "Improve learning skills and gather your knowledge.",
       buttonText: "Get Started",
       buttonLink: "/public-lessons",
-      bgImage: "https://source.unsplash.com/1600x600/?programming,coding",
+      bgImage: "https://i.ibb.co.com/fd6xZ9tK/compressed-3.jpg",
     },
     {
-      title: "Build Real Projects",
-      subtitle: "Hands-on projects to improve your portfolio and skills.",
-      buttonText: "Explore Projects",
-      buttonLink: "/projects",
-      bgImage: "https://source.unsplash.com/1600x600/?computer,code",
+      title: "Build Real Lessons",
+      subtitle: "Share your life lessons",
+      buttonText: "Add Lessons",
+      buttonLink: "/dashboard/add-lesson",
+      bgImage: "https://i.ibb.co.com/zVYD64MX/compressed-2.jpg",
     },
     {
       title: "Upgrade Your Skills",
       subtitle: "Join our premium plans for exclusive lessons and mentorship.",
       buttonText: "See Pricing",
-      buttonLink: "/pricing",
-      bgImage: "https://source.unsplash.com/1600x600/?technology,learning",
+      buttonLink: "/dashboard/pricing",
+      bgImage: "https://i.ibb.co.com/bg6KjLMV/1.png",
     },
   ];
 
@@ -44,11 +44,11 @@ const HeroSlider = () => {
     <div className="relative">
       <Slider {...settings}>
         {slides.map((slide, index) => (
-          <div key={index} className="h-[500px] relative">
+          <div key={index} className="h-[70vh] relative">
             <img
               src={slide.bgImage}
               alt={slide.title}
-              className="w-full h-[500px] object-cover brightness-75"
+              className="w-full vh-70 object-cover brightness-75"
             />
             <div className="absolute inset-0 flex flex-col justify-center items-start px-10 md:px-20 text-white">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">{slide.title}</h2>

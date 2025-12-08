@@ -22,13 +22,12 @@ const Navbar = () => {
                 <>
                     <li><NavLink to="/dashboard/add-lesson" className={linkStyle}>Add Lesson</NavLink></li>
                     <li><NavLink to="/dashboard/my-lessons" className={linkStyle}>My Lessons</NavLink></li>
+
+                    {user?.isPremium === true ?
+                        <span className="ml-2 font-semibold text-yellow-500">Premium ⭐</span> :
+                        <li><NavLink to="/dashboard/pricing" className={linkStyle}>Pricing / Upgrade</NavLink></li>
+                    }
                 </>
-            )}
-            {user && !user.isPremium && (
-                <li><NavLink to="/dashboard/pricing" className={linkStyle}>Pricing / Upgrade</NavLink></li>
-            )}
-            {user?.isPremium && (
-                <span className="ml-2 font-semibold text-yellow-500">Premium ⭐</span>
             )}
 
         </>

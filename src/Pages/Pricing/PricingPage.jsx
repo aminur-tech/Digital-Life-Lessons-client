@@ -11,7 +11,8 @@ const PricingPage = () => {
   const { data: user = {}, isLoading, isError } = useQuery({
     queryKey: ['user', authUser?._id],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users/${authUser._id}`);
+      const res = await axiosSecure.get(`/users/premium/${authUser._id}`);
+      // console.log(res.data)
       return res.data;
     },
     enabled: !!authUser?._id

@@ -3,7 +3,7 @@ import HeroSlider from './HeroSlider';
 
 const Home = () => {
     return (
-        <div>
+        <div className='mb-20'>
             <div>
                 <HeroSlider></HeroSlider>
             </div>

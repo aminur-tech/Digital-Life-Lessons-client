@@ -23,6 +23,7 @@ import PaymentSuccess from "../Pages/Pricing/PaymentSuccess";
 import PaymentCancel from "../Pages/Pricing/PaymentCancel";
 import PrivateRoutes from "./PrivateRoutes";
 import AdminRoute from "./AdminRoute";
+import PublicLessons from "../Pages/PublicLesson/PublicLessons";
 
 export const router = createBrowserRouter([
   {
@@ -31,14 +32,15 @@ export const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       { index: true, element: <Home /> },
+      {path: 'public-lessons', element:<PublicLessons></PublicLessons>}
     ],
   },
   {
     path: "/auth",
     element: <AuthLayouts />,
     children: [
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
+      { path: "/auth/login", element: <Login /> },
+      { path: "/auth/register", element: <Register /> },
     ],
   },
   {
