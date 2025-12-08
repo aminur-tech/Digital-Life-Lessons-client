@@ -48,7 +48,7 @@ const HeroSlider = () => {
             <img
               src={slide.bgImage}
               alt={slide.title}
-              className="w-full vh-70 object-cover brightness-75"
+              className="w-full vh-70 object-cover brightness-60"
             />
             <div className="absolute inset-0 flex flex-col justify-center items-start px-10 md:px-20 text-white">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">{slide.title}</h2>

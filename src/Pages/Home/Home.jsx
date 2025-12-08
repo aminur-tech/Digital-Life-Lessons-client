@@ -1,11 +1,15 @@
 import React from 'react';
 import HeroSlider from './HeroSlider';
+import WhyLearningMatters from './WhyLearningMatters';
 
 const Home = () => {
     return (
-        <div className='mb-20'>
-            <div>
+        <div >
+            <div className='mb-20'>
                 <HeroSlider></HeroSlider>
+            </div>
+            <div className='mb-20'>
+                <WhyLearningMatters></WhyLearningMatters>
             </div>
         </div>
     );
