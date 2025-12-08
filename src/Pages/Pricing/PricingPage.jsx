@@ -9,13 +9,13 @@ const PricingPage = () => {
 
   // Fetch user from backend
   const { data: user = {}, isLoading, isError } = useQuery({
-    queryKey: ['user', authUser?._id],
+    queryKey: ['user', authUser?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users/premium/${authUser._id}`);
+      const res = await axiosSecure.get(`/users/premium/${authUser.email}`);
       // console.log(res.data)
       return res.data;
     },
-    enabled: !!authUser?._id
+    enabled: !!authUser?.email
   });
 
   if (!authUser) return <p className="text-center mt-20">Please log in to see pricing.</p>;
@@ -54,7 +54,7 @@ const PricingPage = () => {
         <tbody>
           <tr>
             <td className="border px-4 py-2">Number of Lessons</td>
-            <td className="border px-4 py-2">5</td>
+            <td className="border px-4 py-2">6</td>
             <td className="border px-4 py-2">Unlimited</td>
           </tr>
           <tr>

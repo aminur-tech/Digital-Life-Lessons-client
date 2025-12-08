@@ -13,16 +13,16 @@ const Navbar = () => {
     const handleLogOut = () => logOut().catch(() => { });
 
     // Fetch users ONLY once
-   useEffect(() => {
-    if (!user?.email) return; 
+    useEffect(() => {
+        if (!user?.email) return;
 
-    axiosSecure.get(`/users/${user.email}`)
-        .then(res => {
-            console.log(res.data);
-            setUserInfo(res.data);
-        })
-        .catch(err => console.error(err));
-}, [user, axiosSecure]);
+        axiosSecure.get(`/users/premium/${user.email}`)
+            .then(res => {
+                console.log(res.data);
+                setUserInfo(res.data);
+            })
+            .catch(err => console.error(err));
+    }, [user, axiosSecure]);
 
 
     // Active route style
@@ -45,9 +45,17 @@ const Navbar = () => {
                         {userInfo?.isPremium ? (
                             <span className="ml-2 font-semibold text-yellow-500">Premium ⭐</span>
                         ) : (
-                            <NavLink to="/dashboard/pricing" className={linkStyle}>
-                                Pricing / Upgrade
+                            <NavLink
+                                to="/dashboard/pricing"
+                                className="relative inline-block px-5 py-2 font-semibold text-black rounded-lg shadow-md text-center
+                                bg-yellow-500 hover:bg-yellow-600 overflow-hidden"
+                            >
+                                {/* Animated background behind button */}
+                                <span className="absolute inset-0 bg-yellow-400 rounded-lg opacity-50 animate-pulse -z-10"></span>
+
+                                Upgrade
                             </NavLink>
+
                         )}
                     </li>
                 </>

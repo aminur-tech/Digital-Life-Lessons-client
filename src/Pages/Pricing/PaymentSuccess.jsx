@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 
 const PaymentSuccess = () => {
   const axiosSecure = useAxiosSecure();
   const [searchParams] = useSearchParams();
-  const [tx, setTx] = useState(null);
-  const [userToDisplay, setUserToDisplay] = useState(null);
+  const [tx, setTx] = useState(null)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -21,7 +20,6 @@ const PaymentSuccess = () => {
       .then((res) => {
         console.log(res.data)
         setTx(res.data.transaction);
-        setUserToDisplay(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -94,14 +92,16 @@ const PaymentSuccess = () => {
               </td>
             </tr>
 
-            <tr>
-              <td className="py-3 px-4 border-b">Premium Activated</td>
-              <td className="py-3 px-4 border-b">
-                {new Date(userToDisplay?.premiumAt).toLocaleString()}
-              </td>
-            </tr>
           </tbody>
         </table>
+        <div className="flex justify-items-center">
+          <Link
+          to="/"
+          className="mt-10 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
+        >
+          Go Back Home
+        </Link>
+        </div>
       </div>
     </div>
   );
