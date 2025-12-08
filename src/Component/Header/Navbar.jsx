@@ -1,40 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
+    const axiosSecure = useAxiosSecure()
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [userInfo, setUserInfo] = useState(null);
 
     const handleLogOut = () => logOut().catch(() => { });
 
-    // Active route + drop shadow for readability
+    // Fetch users ONLY once
+   useEffect(() => {
+    if (!user?.email) return; 
+
+    axiosSecure.get(`/users/${user.email}`)
+        .then(res => {
+            console.log(res.data);
+            setUserInfo(res.data);
+        })
+        .catch(err => console.error(err));
+}, [user, axiosSecure]);
+
+
+    // Active route style
     const linkStyle = ({ isActive }) =>
         isActive
-            ? "text-blue-500 font-semibold border-b-2 border-blue-500 pb-1 drop-shadow-sm"
-            : "text-gray-800 hover:text-blue-500 drop-shadow-sm transition-colors duration-200";
+            ? 'text-blue-500 font-semibold border-b-2 border-blue-500 pb-1 drop-shadow-sm'
+            : 'text-gray-800 hover:text-blue-500 drop-shadow-sm transition-colors duration-200';
 
     const navLinks = (
         <>
             <li><NavLink to="/" className={linkStyle}>Home</NavLink></li>
             <li><NavLink to="/public-lessons" className={linkStyle}>Public Lessons</NavLink></li>
+
             {user && (
                 <>
                     <li><NavLink to="/dashboard/add-lesson" className={linkStyle}>Add Lesson</NavLink></li>
                     <li><NavLink to="/dashboard/my-lessons" className={linkStyle}>My Lessons</NavLink></li>
 
-                    {user?.isPremium === true ?
-                        <span className="ml-2 font-semibold text-yellow-500">Premium ⭐</span> :
-                        <li><NavLink to="/dashboard/pricing" className={linkStyle}>Pricing / Upgrade</NavLink></li>
-                    }
+                    <li>
+                        {userInfo?.isPremium ? (
+                            <span className="ml-2 font-semibold text-yellow-500">Premium ⭐</span>
+                        ) : (
+                            <NavLink to="/dashboard/pricing" className={linkStyle}>
+                                Pricing / Upgrade
+                            </NavLink>
+                        )}
+                    </li>
                 </>
             )}
-
         </>
     );
 
     return (
         <div className="navbar sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm">
+
             {/* LEFT SIDE */}
             <div className="navbar-start">
                 <div className="dropdown">
@@ -55,10 +78,17 @@ const Navbar = () => {
                         )}
                     </ul>
                 </div>
-                <Link to="/"><img src="https://i.ibb.co.com/5WQymhQv/images-removebg-preview.png" alt="" className='w-15 rounded-full' /></Link>
+
+                <Link to="/">
+                    <img
+                        src="https://i.ibb.co.com/5WQymhQv/images-removebg-preview.png"
+                        alt=""
+                        className="w-16 rounded-full"
+                    />
+                </Link>
             </div>
 
-            {/* CENTER (Desktop menu) */}
+            {/* CENTER */}
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">{navLinks}</ul>
             </div>
@@ -71,6 +101,7 @@ const Navbar = () => {
                         <Link to="/auth/register" className="btn btn-primary rounded-xl">Signup</Link>
                     </>
                 )}
+
                 {user && (
                     <div className="relative">
                         <img
@@ -79,12 +110,15 @@ const Navbar = () => {
                             className="w-10 h-10 rounded-full cursor-pointer border"
                             onClick={() => setDropdownOpen(!dropdownOpen)}
                         />
+
                         {dropdownOpen && (
                             <div className="absolute right-0 mt-3 w-48 bg-white/80 backdrop-blur-lg shadow-lg rounded-xl p-3 z-20">
                                 <p className="font-semibold">{user?.displayName}</p>
                                 <div className="divider my-1"></div>
+
                                 <Link className="block py-1 btn" to="/profile">Profile</Link>
                                 <Link className="block py-1 btn" to="/dashboard">Dashboard</Link>
+
                                 <button
                                     onClick={handleLogOut}
                                     className="btn btn-sm btn-outline w-full mt-2"
