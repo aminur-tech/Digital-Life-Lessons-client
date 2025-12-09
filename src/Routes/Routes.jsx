@@ -24,6 +24,8 @@ import PaymentCancel from "../Pages/Pricing/PaymentCancel";
 import PrivateRoutes from "./PrivateRoutes";
 import AdminRoute from "./AdminRoute";
 import PublicLessons from "../Pages/PublicLesson/PublicLessons";
+import LessonsDetails from "../Pages/Home/LessonsDetails/LessonsDetails";
+
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +34,14 @@ export const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       { index: true, element: <Home /> },
-      {path: 'public-lessons', element:<PublicLessons></PublicLessons>}
+      {
+        path: 'public-lessons',
+        element: <PublicLessons></PublicLessons>
+      },
+      {
+        path: 'lessons/:id',
+        element: <PrivateRoutes><LessonsDetails></LessonsDetails></PrivateRoutes>
+      }
     ],
   },
   {

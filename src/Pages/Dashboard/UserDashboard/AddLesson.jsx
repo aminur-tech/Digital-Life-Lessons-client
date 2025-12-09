@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import axios from "axios";
-import useRole from "../../../Hooks/useRole";
+
 
 const AddLesson = () => {
-  const { user} = useAuth();
-  const {role}= useRole()
+  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, reset } = useForm();
   const [image, setImage] = useState(null);
+  const [isPremium, setIsPremium] = useState(null)
+
+  useEffect(() => {
+  if (!user?.email) return;
+
+  axiosSecure
+    .get(`/users/premium/${user.email}`)
+    .then(res => setIsPremium(res.data.isPremium))
+    .catch(() => setIsPremium(false));
+}, [user, axiosSecure]);
+
 
   const onSubmit = async (data) => {
     try {
@@ -30,7 +40,8 @@ const AddLesson = () => {
       const lessonData = {
         ...data,
         email: user.email,
-        image: imageUrl, // send the URL, not the File object
+        image: imageUrl,
+
         createdAt: new Date(),
       };
 
@@ -98,8 +109,7 @@ const AddLesson = () => {
         <select
           {...register("accessLevel")}
           className="select select-bordered w-full"
-          disabled={role !== "Premium"}
-          title={role !== "Premium" ? "Upgrade to Premium to create paid lessons" : ""}
+          disabled={isPremium === false}
         >
           <option value="Free">Free</option>
           <option value="Premium">Premium</option>

@@ -63,7 +63,7 @@ const PublicLessons = () => {
                         <span>Premium Lesson – Upgrade to view</span>
                         {!userIsPremium && (
                           <Link
-                            to="/pricing"
+                            to="/dashboard/pricing"
                             className="mt-2 px-3 py-1 bg-yellow-500 text-black rounded hover:bg-yellow-600 transition"
                           >
                             Upgrade to Premium
@@ -111,7 +111,7 @@ const PublicLessons = () => {
                 </p>
 
                 <Link
-                  to={locked ? (isPremiumLesson ? "/pricing" : `/lessons/${lesson._id}`) : `/lessons/${lesson._id}`}
+                  to={locked ? (isPremiumLesson ? "/dashboard/pricing" : `/lessons/${lesson._id}`) : `/lessons/${lesson._id}`}
                   className="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
                 >
                   See Details
