@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 
 const MyLessons = () => {
   const { user } = useAuth();
-  // console.log(user)
   const axiosSecure = useAxiosSecure();
 
   const [selectedLesson, setSelectedLesson] = useState(null);
