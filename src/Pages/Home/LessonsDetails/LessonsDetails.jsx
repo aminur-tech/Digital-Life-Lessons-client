@@ -9,6 +9,8 @@ import useAuth from "../../../Hooks/useAuth";
 import { useParams } from "react-router";
 import { Eye, Clock, Calendar, Lock } from "lucide-react"; // Added more icons
 import { Link } from "react-router"; // Assuming you use react-router-dom Link
+import { useQuery } from "@tanstack/react-query";
+
 
 const LessonsDetails = () => {
   const axiosSecure = useAxiosSecure();
@@ -21,15 +23,14 @@ const LessonsDetails = () => {
   const [visibleCount, setVisibleCount] = useState(4);
 
 
+
   useEffect(() => {
     if (!id) return;
     // Fetch lesson
     axiosSecure.get(`/lessons/${id}`).then((res) => {
-      console.log('info', res.data)
       setLesson(res.data);
 
     });
-
     // Fetch similar lessons
     axiosSecure.get(`/lessons/similar/${id}`).then((res) => {
       setSimilarLessons(res.data);
@@ -42,11 +43,37 @@ const LessonsDetails = () => {
     }
   }, [id, user, axiosSecure]);
 
+  // ✅ GET FAVORITE STATUS
+  const { data: isSaved, refetch: refetchFavorite } = useQuery({
+    queryKey: ["favoriteStatus", id, user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/favorites/${user.email}`);
+
+      return res.data.some(fav => fav.lessonId === id);
+    },
+    enabled: !!id && !!user?.email,
+  });
+
+
+  const lessonInfo = {
+    lessonId: id,
+    lessonImage: lesson?.image || '',
+    lessonTitle: lesson?.title|| '',
+    lessonDescription: lesson?.description|| '',
+    category: lesson?.category || ''
+  }
+  const handleFavoriteToggle = async () => {
+    await axiosSecure.post("/favorites/toggle", { ...lessonInfo });
+    refetchFavorite(); // refresh UI
+  };
+
+
+
+
   if (!lesson) return <p className="text-center py-20">Loading lesson details...</p>;
 
-  // Logic for blocking content
-  const isPremiumContent = lesson.premium === true || lesson.accessLevel === 'premium'; // Check for premium flag
-  const isBlocked = isPremiumContent && isPremium !== true; // Block if premium content AND user is NOT premium
+  const isPremiumContent = lesson.premium === true || lesson.accessLevel === 'premium'; // 
+  const isBlocked = isPremiumContent && isPremium !== true;
 
 
 
@@ -119,8 +146,8 @@ const LessonsDetails = () => {
                 className="flex-1"
               />
               <FavoriteButton
-                initialSaved={lesson.isSaved}
-                onToggle={() => { }}
+                initialSaved={isSaved}
+                onToggle={() => handleFavoriteToggle()}
                 className="flex-1"
               />
 
@@ -214,9 +241,9 @@ const LessonsDetails = () => {
         lessonId={lesson._id}
         reporter={user?.email}
 
-        author_Name={lesson.name}          
-        author_Email={lesson.email}       
-        author_Img={lesson.image || lesson.author_Img}          
+        author_Name={lesson.name}
+        author_Email={lesson.email}
+        author_Img={lesson.image}
       />
 
 

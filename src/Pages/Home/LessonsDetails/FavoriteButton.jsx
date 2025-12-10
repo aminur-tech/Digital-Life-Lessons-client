@@ -1,5 +1,6 @@
+import { Heart } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Bookmark } from "lucide-react";
+
 
 const FavoriteButton = ({ initialSaved = false, onToggle }) => {
   const [saved, setSaved] = useState(initialSaved);
@@ -19,12 +20,12 @@ const FavoriteButton = ({ initialSaved = false, onToggle }) => {
       onClick={toggleSave}
       className="flex items-center gap-2 px-3 py-2 border rounded-lg hover:bg-gray-100 transition"
     >
-      <Bookmark
+      <Heart
         className={`w-5 h-5 ${
-          saved ? "text-blue-500 fill-blue-500" : "text-gray-500"
+          saved ? "text-red-500 fill-red-500" : "text-gray-500"
         }`}
       />
-      <span>{saved ? "Saved" : "Save"}</span>
+      <span>{saved ? "Favorited" : "Favorite"}</span>
     </button>
   );
 };
