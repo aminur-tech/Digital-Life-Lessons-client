@@ -18,17 +18,21 @@ const LessonsDetails = () => {
   const [showReport, setShowReport] = useState(false);
   const [similarLessons, setSimilarLessons] = useState([]);
   const [isPremium, setIsPremium] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(4);
+
 
   useEffect(() => {
     if (!id) return;
     // Fetch lesson
     axiosSecure.get(`/lessons/${id}`).then((res) => {
       setLesson(res.data);
+
     });
 
     // Fetch similar lessons
     axiosSecure.get(`/lessons/similar/${id}`).then((res) => {
       setSimilarLessons(res.data);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
     // Fetch premium status
@@ -43,9 +47,10 @@ const LessonsDetails = () => {
   const isPremiumContent = lesson.premium === true || lesson.accessLevel === 'premium'; // Check for premium flag
   const isBlocked = isPremiumContent && isPremium !== true; // Block if premium content AND user is NOT premium
 
+
+
   return (
     <div>
-      {/* MAIN CONTENT LAYOUT */}
       <div className="lg:grid lg:grid-cols-3 lg:gap-10">
 
         {/* LEFT COLUMN: Lesson Content (2/3 width) */}
@@ -57,7 +62,7 @@ const LessonsDetails = () => {
             <div className="flex items-center space-x-4 text-sm text-gray-500">
               <span className="text-indigo-600 font-medium">{lesson.category}</span>
               <span>|</span>
-              <span>Tone: {lesson.emotionalTone}</span>
+              <span>Tone: {lesson.tone}</span>
             </div>
           </div>
           {/* FEATURE IMAGE */}
@@ -161,21 +166,45 @@ const LessonsDetails = () => {
         </aside>
       </div>
 
-      {/* SIMILAR LESSONS SECTION (Full width below main content) */}
-      <section className="mt-20 pt-10 border-t border-gray-200">
+      {/* SIMILAR LESSONS SECTION  */}
+      <section className="mt-20 mb-24 pt-10 border-t border-gray-200">
         <h2 className="text-3xl font-bold mb-8 text-gray-900">More Lessons You Might Like</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {similarLessons.map((s) => (
-            <Link to={`/lessons/${s._id}`} key={s._id} className="block group bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden">
-              <img src={s.image} alt={s.title} className="h-40 w-full object-cover rounded-t-xl group-hover:scale-105 transition duration-500" />
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {similarLessons.slice(0, visibleCount).map((s) => (
+            <Link
+              to={`/lessons/${s._id}`}
+              key={s._id}
+              className="block group bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden"
+            >
+              <img
+                src={s.image}
+                alt={s.title}
+                className="h-40 w-full object-cover rounded-t-xl group-hover:scale-105 transition duration-500"
+              />
               <div className="p-4">
-                <h3 className="font-bold text-lg text-gray-800 group-hover:text-indigo-600 transition duration-200">{s.title}</h3>
+                <h3 className="font-bold text-lg text-gray-800 group-hover:text-indigo-600 transition duration-200">
+                  {s.title}
+                </h3>
                 <p className="text-sm text-gray-500 mt-1">{s.category}</p>
               </div>
             </Link>
           ))}
         </div>
+
+        {/* Show More Button */}
+        {visibleCount < similarLessons.length && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={() => setVisibleCount(prev => prev + 4)}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-full font-semibold hover:bg-indigo-700 shadow-md transition"
+            >
+              Show More
+            </button>
+          </div>
+        )}
       </section>
+
 
       {/* REPORT MODAL */}
       <ReportModal
