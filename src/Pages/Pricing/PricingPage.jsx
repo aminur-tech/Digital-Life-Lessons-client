@@ -54,7 +54,7 @@ const PricingPage = () => {
         <tbody>
           <tr>
             <td className="border px-4 py-2">Number of Lessons</td>
-            <td className="border px-4 py-2">6</td>
+            <td className="border px-4 py-2">8</td>
             <td className="border px-4 py-2">Unlimited</td>
           </tr>
           <tr>

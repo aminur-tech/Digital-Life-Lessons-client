@@ -41,7 +41,8 @@ const AddLesson = () => {
         ...data,
         email: user.email,
         image: imageUrl,
-
+        author_Name:user.displayName,
+        author_Img:user.photoURL, 
         createdAt: new Date(),
       };
 

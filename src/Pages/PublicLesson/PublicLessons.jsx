@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../Hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Lock, Unlock } from "lucide-react";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import axios from "axios";
@@ -8,13 +8,14 @@ import axios from "axios";
 const PublicLessons = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const [lessons, setLessons] = useState([]);
-  const [userIsPremium, setUserIsPremium] = useState(false); // boolean
+  const [userIsPremium, setUserIsPremium] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(8); // default 8 cards
 
   // Get user premium status
   useEffect(() => {
     if (!user?.email) return;
-
     axiosSecure
       .get(`/users/premium/${user.email}`)
       .then(res => setUserIsPremium(res.data.isPremium))
@@ -29,90 +30,111 @@ const PublicLessons = () => {
       .catch(err => console.error("Failed to load lessons:", err));
   }, []);
 
-  // Limit lessons for free users
-  const displayedLessons = userIsPremium ? lessons : lessons.slice(0, 6);
+  // Slice lessons to display only visibleCount
+  const displayedLessons = lessons.slice(0, visibleCount);
+
+  const handleSeeMore = () => {
+    if (!userIsPremium) {
+      navigate("/dashboard/pricing"); // Free user redirect
+    } else {
+      setVisibleCount(prev => prev + 4); // Premium user load 4 more cards
+    }
+  };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+    <div className="my-15">
+      <h1 className="text-3xl md:text-4xl font-bold mb-15 text-center text-gray-800">
         Browse Public Life Lessons
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {displayedLessons.map(lesson => {
           const isPremiumLesson = lesson.accessLevel?.toLowerCase() === "premium";
           const isPrivateLesson = lesson.privacy?.toLowerCase() === "private";
           const isCreator = user?.email === lesson.email;
-
-          // Lock condition
           const locked = (isPremiumLesson && !userIsPremium) || (isPrivateLesson && !isCreator);
 
           return (
             <div
               key={lesson._id}
-              className={`p-5 rounded-xl shadow-lg bg-white relative overflow-hidden ${locked ? "opacity-60" : ""}`}
+              className={`relative bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-xl ${locked ? "opacity-80" : ""}`}
             >
+              {/* LOCK OVERLAY */}
               {locked && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-                  <div className="bg-black/40 text-white px-4 py-2 rounded-lg flex flex-col items-center gap-2 text-center">
-                    <Lock className="w-5 h-5" />
-                    {isPrivateLesson ? (
-                      "Private Lesson – Only Creator Can View"
-                    ) : (
-                      <>
-                        <span>Premium Lesson – Upgrade to view</span>
-                        {!userIsPremium && (
-                          <Link
-                            to="/dashboard/pricing"
-                            className="mt-2 px-3 py-1 bg-yellow-500 text-black rounded hover:bg-yellow-600 transition"
-                          >
-                            Upgrade to Premium
-                          </Link>
-                        )}
-                      </>
-                    )}
-                  </div>
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 text-white text-center p-4 rounded-xl">
+                  <Lock className="w-6 h-6 mb-2" />
+                  <p className="text-sm font-medium">
+                    {isPrivateLesson
+                      ? "Private Lesson – Only Creator Can View"
+                      : "Premium Lesson – Upgrade to View"}
+                  </p>
+                  {!isPrivateLesson && !userIsPremium && (
+                    <Link
+                      to="/dashboard/pricing"
+                      className="mt-3 px-4 py-2 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600 transition"
+                    >
+                      Upgrade
+                    </Link>
+                  )}
                 </div>
               )}
 
-              <div className={`${locked ? "blur-sm" : ""}`}>
-                <h2 className="text-2xl font-semibold mb-2">{lesson.title}</h2>
-                <p className="text-gray-600 mb-3">{lesson.description.slice(0, 80)}...</p>
+              {/* CATEGORY */}
+              <div className="absolute top-2 left-2 z-10">
+                <span className="bg-blue-400 text-white px-2 py-1 rounded-2xl text-xs font-semibold">
+                  {lesson.category}
+                </span>
+              </div>
 
-                <div className="flex justify-between text-sm text-gray-500 mb-3">
-                  <span>📂 {lesson.category}</span>
-                  <span>💬 {lesson.tone || lesson.emotionalTone}</span>
-                </div>
+              {/* IMAGE */}
+              <div className="h-44 w-full overflow-hidden relative">
+                <img
+                  src={lesson.image}
+                  alt={lesson.title}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                />
+              </div>
 
-                <div className="flex items-center gap-3 mb-4">
+              {/* CONTENT */}
+              <div className={`p-4 ${locked ? "blur-sm" : ""}`}>
+                <h2 className="text-lg font-semibold mb-1 text-gray-800">
+                  {lesson.title}
+                </h2>
+
+                <p className="text-gray-600 text-sm mb-3">
+                  {lesson.description}
+                </p>
+
+                {/* CREATOR INFO */}
+                <div className="flex items-center gap-3 mb-3">
                   <img
-                    src={lesson.image || lesson.creatorPhoto}
-                    className="w-10 h-10 rounded-full"
-                    alt="Creator"
+                    src={lesson.author_Img}
+                    alt={lesson.author_Name}
+                    className="w-9 h-9 rounded-full object-cover border border-gray-200"
                   />
                   <div>
-                    <p className="font-medium">{lesson.creatorName || lesson.email}</p>
-                    <p className="text-sm text-gray-400">
-                      {new Date(lesson.createdAt).toLocaleDateString()}
-                    </p>
+                    <p className="text-sm font-medium text-gray-800">{lesson.author_Name}</p>
+                    <p className="text-xs text-gray-400">{new Date(lesson.createdAt).toLocaleDateString()}</p>
                   </div>
                 </div>
 
-                <p className="text-sm mb-3 flex items-center gap-1">
+                {/* ACCESS LEVEL */}
+                <div className="mb-3">
                   {isPremiumLesson ? (
-                    <span className="text-red-500 flex items-center gap-1">
+                    <span className="flex items-center gap-1 text-red-500 text-sm font-semibold">
                       <Lock className="w-4 h-4" /> Premium
                     </span>
                   ) : (
-                    <span className="text-green-600 flex items-center gap-1">
+                    <span className="flex items-center gap-1 text-green-600 text-sm font-semibold">
                       <Unlock className="w-4 h-4" /> Free
                     </span>
                   )}
-                </p>
+                </div>
 
+                {/* SEE DETAILS BUTTON */}
                 <Link
                   to={locked ? (isPremiumLesson ? "/dashboard/pricing" : `/lessons/${lesson._id}`) : `/lessons/${lesson._id}`}
-                  className="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                  className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition"
                 >
                   See Details
                 </Link>
@@ -120,19 +142,19 @@ const PublicLessons = () => {
             </div>
           );
         })}
-
-        {!userIsPremium && lessons.length > 6 && (
-          <div className="p-5 rounded-xl shadow-lg bg-white flex flex-col items-center justify-center text-center">
-            <p className="mb-3 font-medium">Want to see all lessons?</p>
-            <Link
-              to="/dashboard/pricing"
-              className="px-4 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-600 transition"
-            >
-              Upgrade to Premium
-            </Link>
-          </div>
-        )}
       </div>
+
+      {/* SEE MORE BUTTON */}
+      {lessons.length > visibleCount && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={handleSeeMore}
+            className="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition"
+          >
+            See More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

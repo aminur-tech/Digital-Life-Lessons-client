@@ -25,6 +25,7 @@ const LessonsDetails = () => {
     if (!id) return;
     // Fetch lesson
     axiosSecure.get(`/lessons/${id}`).then((res) => {
+      console.log('info', res.data)
       setLesson(res.data);
 
     });
@@ -146,19 +147,19 @@ const LessonsDetails = () => {
             <div className="text-gray-600 text-base space-y-3">
               <div className="flex items-center gap-3">
                 <Eye className="w-5 h-5 text-indigo-500" />
-                <span>**Views:** {Math.floor(Math.random() * 10000).toLocaleString()}</span>
+                <span>Views: {Math.floor(Math.random() * 10000).toLocaleString()}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Calendar className="w-5 h-5 text-indigo-500" />
-                <span>**Created:** {lesson.createdAt}</span>
+                <span>Created: {lesson.createdAt}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="w-5 h-5 text-indigo-500" />
-                <span>**Last Updated:** {lesson.updatedAt}</span>
+                <span>Last Updated: {lesson.updatedAt}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Lock className="w-5 h-5 text-indigo-500" />
-                <span>**Visibility:** {lesson.visibility}</span>
+                <span>Visibility:  {lesson.visibility}</span>
               </div>
             </div>
           </div>
@@ -210,8 +211,16 @@ const LessonsDetails = () => {
       <ReportModal
         isOpen={showReport}
         onClose={() => setShowReport(false)}
-        onSubmit={(reason) => console.log("Report:", reason)}
+        lessonId={lesson._id}
+        reporter={user?.email}
+
+        author_Name={lesson.name}          
+        author_Email={lesson.email}       
+        author_Img={lesson.image || lesson.author_Img}          
       />
+
+
+
     </div>
   );
 };
