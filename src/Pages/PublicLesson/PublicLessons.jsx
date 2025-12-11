@@ -47,7 +47,7 @@ const PublicLessons = () => {
         Browse Public Life Lessons
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1  md:grid-cols-3 lg:grid-cols-4 gap-6">
         {displayedLessons.map(lesson => {
           const isPremiumLesson = lesson.accessLevel?.toLowerCase() === "premium";
           const isPrivateLesson = lesson.privacy?.toLowerCase() === "private";
@@ -102,7 +102,7 @@ const PublicLessons = () => {
                 </h2>
 
                 <p className="text-gray-600 text-sm mb-3">
-                  {lesson.description}
+                  {lesson.description.slice(0, 70)}...}
                 </p>
 
                 {/* CREATOR INFO */}

@@ -30,13 +30,16 @@ const LessonsDetails = () => {
     // Fetch lesson
     axiosSecure.get(`/lessons/${id}`).then((res) => {
       setLesson(res.data);
+ 
 
     });
+    
     // Fetch similar lessons
     axiosSecure.get(`/lessons/similar/${id}`).then((res) => {
       setSimilarLessons(res.data);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
+
 
     // Fetch premium status
     if (user?.email) {
@@ -83,6 +86,9 @@ const LessonsDetails = () => {
     toast.success("Report submitted successfully!");
     setShowReport(false);
   }
+
+
+  
 
 
 
@@ -182,7 +188,7 @@ const LessonsDetails = () => {
           {/* AUTHOR CARD */}
           <div className="p-6 bg-white rounded-xl shadow-md border border-gray-100">
             <h3 className="font-semibold text-lg mb-3 border-b pb-2">Lesson Creator</h3>
-            <AuthorCard author={lesson.author} />
+           <AuthorCard authorEmail={lesson.email} />
           </div>
 
           {/* LESSON STATS & METADATA */}

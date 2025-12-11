@@ -25,6 +25,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import AdminRoute from "./AdminRoute";
 import PublicLessons from "../Pages/PublicLesson/PublicLessons";
 import LessonsDetails from "../Pages/Home/LessonsDetails/LessonsDetails";
+import AuthorProfile from "../Pages/Dashboard/Author/AuthorProfile";
 
 
 export const router = createBrowserRouter([
@@ -68,6 +69,7 @@ export const router = createBrowserRouter([
       { path: "pricing", element: <PricingPage /> },
       { path: "payment-success", element: <PaymentSuccess /> },
       { path: "payment-cancel", element: <PaymentCancel /> },
+      { path: "author/:email", element: <AuthorProfile/> },
 
       // Admin Dashboard
       { path: "admin", element: <AdminRoute><AdminHome /></AdminRoute> },
