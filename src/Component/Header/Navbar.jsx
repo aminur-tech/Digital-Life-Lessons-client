@@ -9,6 +9,7 @@ const Navbar = () => {
     const axiosSecure = useAxiosSecure()
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
+    const [role, setRole]= useState(null)
 
     const handleLogOut = () => logOut().catch(() => { });
 
@@ -22,6 +23,9 @@ const Navbar = () => {
                 setUserInfo(res.data);
             })
             .catch(err => console.error(err));
+
+          axiosSecure.get(`/users/role/${user.email}`) 
+          .then(res=> setRole(res.data.role) ) 
     }, [user, axiosSecure]);
 
 
@@ -124,7 +128,12 @@ const Navbar = () => {
                                 <p className="font-semibold">{user?.displayName}</p>
                                 <div className="divider my-1"></div>
 
-                                <Link className="block py-1 btn" to="/profile">Profile</Link>
+                                {
+                                    role==="admin"?
+                                    <Link className="block py-1 btn" to="dashboard/admin/profile">Profile</Link> 
+                                    :
+                                    <Link className="block py-1 btn" to="dashboard/profile">Profile</Link>
+                                }
                                 <Link className="block py-1 btn" to="/dashboard">Dashboard</Link>
 
                                 <button

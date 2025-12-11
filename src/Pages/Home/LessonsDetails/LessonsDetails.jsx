@@ -10,6 +10,7 @@ import { useParams } from "react-router";
 import { Eye, Clock, Calendar, Lock } from "lucide-react"; // Added more icons
 import { Link } from "react-router"; // Assuming you use react-router-dom Link
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 
 const LessonsDetails = () => {
@@ -54,18 +55,34 @@ const LessonsDetails = () => {
     enabled: !!id && !!user?.email,
   });
 
-
   const lessonInfo = {
     lessonId: id,
     lessonImage: lesson?.image || '',
-    lessonTitle: lesson?.title|| '',
-    lessonDescription: lesson?.description|| '',
+    lessonTitle: lesson?.title || '',
+    lessonDescription: lesson?.description || '',
     category: lesson?.category || ''
   }
   const handleFavoriteToggle = async () => {
     await axiosSecure.post("/favorites/toggle", { ...lessonInfo });
-    refetchFavorite(); // refresh UI
+    refetchFavorite();
   };
+
+  // report fetch
+  const report = {
+    lessonId: id,
+    reporter: user?.email,
+    author_Name: lesson?.name,
+    author_Email: lesson?.email,
+    author_Img: lesson?.image
+  }
+  const handleReport = async ({ reason, details }) => {
+    await axiosSecure.post('/lessons/report', {
+      ...report, reason, details
+    }
+    )
+    toast.success("Report submitted successfully!");
+    setShowReport(false);
+  }
 
 
 
@@ -240,11 +257,12 @@ const LessonsDetails = () => {
         onClose={() => setShowReport(false)}
         lessonId={lesson._id}
         reporter={user?.email}
-
         author_Name={lesson.name}
         author_Email={lesson.email}
         author_Img={lesson.image}
+        onSubmit={handleReport}
       />
+
 
 
 

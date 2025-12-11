@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import toast from "react-hot-toast";
 
 const reasons = [
   "Inappropriate Content",
@@ -11,40 +9,18 @@ const reasons = [
   "Other",
 ];
 
-const ReportModal = ({ isOpen, onClose, lessonId,Reporter,author_Img }) => {
-  const axiosSecure = useAxiosSecure();
-
+const ReportModal = ({ isOpen, onClose, onSubmit }) => {
   const [reason, setReason] = useState("");
   const [details, setDetails] = useState("");
 
   if (!isOpen) return null;
 
-  const handleReport = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!reason) {
-      alert("Please select a reason");
-      return;
-    }
-
-    try {
-      const res = await axiosSecure.post("/lessons/report", {
-        lessonId,
-        Reporter,
-        reason,
-        details,
-        author_Img,
-        createdAt: new Date(),
-      });
-
-      console.log("Report submitted:", res.data);
-
-      toast.success("Report submitted successfully.");
-      onClose();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to submit report.");
-    }
+    if (!reason) return alert("Please select a reason.");
+    onSubmit({ reason, details }); // call parent function
+    setReason("");
+    setDetails("");
   };
 
   return (
@@ -52,7 +28,7 @@ const ReportModal = ({ isOpen, onClose, lessonId,Reporter,author_Img }) => {
       <div className="bg-white p-6 rounded-xl w-80 shadow-lg relative">
         <h3 className="text-xl font-bold mb-3">Report Lesson</h3>
 
-        <form onSubmit={handleReport}>
+        <form onSubmit={handleSubmit}>
           {/* Reason Dropdown */}
           <select
             className="w-full border p-2 rounded mb-3"
@@ -61,7 +37,9 @@ const ReportModal = ({ isOpen, onClose, lessonId,Reporter,author_Img }) => {
           >
             <option value="">Select a reason</option>
             {reasons.map((r) => (
-              <option key={r} value={r}>{r}</option>
+              <option key={r} value={r}>
+                {r}
+              </option>
             ))}
           </select>
 
