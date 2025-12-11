@@ -9,9 +9,11 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import useAuth from "../../../Hooks/useAuth";
 
 const DashboardHome = () => {
   const axiosSecure = useAxiosSecure();
+  const {user} = useAuth()
   const [stats, setStats] = useState({
     totalLessons: 0,
     totalFavorites: 0,
@@ -23,8 +25,8 @@ const DashboardHome = () => {
     const fetchDashboardData = async () => {
       try {
         const [lessonsRes, favoritesRes] = await Promise.all([
-          axiosSecure.get("/lessons/my/me"), 
-          axiosSecure.get("/favorites/me"),  
+          axiosSecure.get(`/lessons/my/${user.email}`), 
+          axiosSecure.get(`/favorites/${user.email}`),  
         ]);
 
         const lessons = lessonsRes.data;
@@ -62,7 +64,7 @@ const DashboardHome = () => {
     };
 
     fetchDashboardData();
-  }, [axiosSecure]);
+  }, [axiosSecure, user]);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
