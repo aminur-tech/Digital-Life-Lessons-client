@@ -31,7 +31,7 @@ const AdminProfile = () => {
 
       toast.success("Name updated successfully!");
       window.location.reload();
-    } catch (err) {
+    } catch  {
       toast.error("Failed to update name");
     } finally {
       setLoading(false);
@@ -67,7 +67,7 @@ const AdminProfile = () => {
 
       toast.success("Profile photo updated!");
       window.location.reload();
-    } catch (err) {
+    } catch  {
       toast.error("Failed to update photo");
     } finally {
       setLoading(false);

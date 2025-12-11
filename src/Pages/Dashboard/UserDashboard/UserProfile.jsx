@@ -4,12 +4,11 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { Edit3, Star, Pencil } from "lucide-react";
 import { updateProfile } from "firebase/auth";
 import axios from "axios";
-import { Link, useParams } from "react-router";
+import { Link} from "react-router";
 
 const UserProfile = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const { id } = useParams()
     const [profile, setProfile] = useState(null);
     const [lessons, setLessons] = useState([]);
     const [savedCount, setSavedCount] = useState(0);
