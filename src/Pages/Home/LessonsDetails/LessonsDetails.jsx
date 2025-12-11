@@ -30,10 +30,10 @@ const LessonsDetails = () => {
     // Fetch lesson
     axiosSecure.get(`/lessons/${id}`).then((res) => {
       setLesson(res.data);
- 
+
 
     });
-    
+
     // Fetch similar lessons
     axiosSecure.get(`/lessons/similar/${id}`).then((res) => {
       setSimilarLessons(res.data);
@@ -88,7 +88,7 @@ const LessonsDetails = () => {
   }
 
 
-  
+
 
 
 
@@ -163,11 +163,11 @@ const LessonsDetails = () => {
             <div className="flex justify-between items-center gap-2">
               {/* LIKES & FAVORITES */}
               <LikeButton
-                initialLiked={lesson.isLiked}
-                initialCount={lesson.likes}
-                onToggle={() => { }}
-                className="flex-1"
+                lessonId={lesson._id}
+                initialLiked={lesson.likes?.includes(user?.email)}
+                initialCount={lesson.likesCount || lesson.likes?.length || 0}
               />
+
               <FavoriteButton
                 initialSaved={isSaved}
                 onToggle={() => handleFavoriteToggle()}
@@ -188,7 +188,7 @@ const LessonsDetails = () => {
           {/* AUTHOR CARD */}
           <div className="p-6 bg-white rounded-xl shadow-md border border-gray-100">
             <h3 className="font-semibold text-lg mb-3 border-b pb-2">Lesson Creator</h3>
-           <AuthorCard authorEmail={lesson.email} />
+            <AuthorCard authorEmail={lesson.email} />
           </div>
 
           {/* LESSON STATS & METADATA */}
@@ -205,11 +205,11 @@ const LessonsDetails = () => {
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="w-5 h-5 text-indigo-500" />
-                <span>Last Updated: {lesson.updatedAt}</span>
+                <span>Last Updated: {lesson.updateAt || lesson.createdAt} </span>
               </div>
               <div className="flex items-center gap-3">
                 <Lock className="w-5 h-5 text-indigo-500" />
-                <span>Visibility:  {lesson.visibility}</span>
+                <span>Visibility:  {lesson.privacy}</span>
               </div>
             </div>
           </div>

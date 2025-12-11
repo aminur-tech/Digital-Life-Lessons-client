@@ -69,6 +69,7 @@ const MyLessons = () => {
       description: form.description.value,
       visibility: form.visibility.value,
       access: form.access.value,
+      updateAt:new Date().toLocaleDateString()
     };
     updateLessonMutation.mutate(updates);
   };
