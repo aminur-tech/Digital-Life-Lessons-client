@@ -44,7 +44,7 @@ const LikeButton = ({ lessonId, initialLiked = false, initialCount = 0 }) => {
         bg-gray-100 hover:bg-gray-200
         ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
     >
-      <BiLike size={20} className={liked ? "text-green-700 " : "text-gray-700"} />
+      <BiLike size={20} className={liked ? "text-green-800 " : "text-gray-700"} />
       <span className="text-gray-900">{likesCount}</span>
     </button>
   );

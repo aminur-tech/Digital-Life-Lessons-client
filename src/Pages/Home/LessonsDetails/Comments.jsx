@@ -25,30 +25,57 @@ const Comments = ({ lessonId }) => {
     loadComments();
   }, [lessonId]);
 
+  // Post a new comment
   const handleSubmit = async () => {
     if (!text.trim()) return;
-    await axiosSecure.post("/comments", { lessonId, comment: text });
-    setText("");
-    loadComments();
+    try {
+      await axiosSecure.post("/comments", {
+        lessonId,
+        comment: text,
+      });
+      setText("");
+      loadComments();
+    } catch (err) {
+      console.error("Failed to post comment:", err);
+    }
   };
 
+  // Post a reply
   const handleReply = async (parentId) => {
     if (!replyText.trim()) return;
-    await axiosSecure.post("/comments", { lessonId, comment: replyText, parentId });
-    setReplyText("");
-    setReplyOpen(null);
-    loadComments();
+    try {
+      await axiosSecure.post("/comments", {
+        lessonId,
+        comment: replyText,
+        parentId,
+      });
+      setReplyText("");
+      setReplyOpen(null);
+      loadComments();
+    } catch (err) {
+      console.error("Failed to post reply:", err);
+    }
   };
 
-  const handleDelete = async (id, authorId) => {
-    if (user?._id !== authorId) return; // Only allow author to delete
-    await axiosSecure.delete(`/comments/${id}`);
-    loadComments();
+  // Delete comment or reply
+  const handleDelete = async (id, authorEmail) => {
+    if (user?.email !== authorEmail) return;
+    try {
+      await axiosSecure.delete(`/comments/${id}`);
+      loadComments();
+    } catch (err) {
+      console.error("Failed to delete comment:", err);
+    }
   };
 
+  // Toggle like for comments or replies
   const toggleLike = async (id, isReply = false) => {
-    await axiosSecure.post("/comments/like", { commentId: id, isReply });
-    loadComments();
+    try {
+      await axiosSecure.post("/comments/like", { commentId: id, isReply });
+      loadComments();
+    } catch (err) {
+      console.error("Failed to toggle like:", err);
+    }
   };
 
   return (
@@ -72,108 +99,114 @@ const Comments = ({ lessonId }) => {
 
       {/* Comment List */}
       <div className="space-y-4">
-        {comments.map((c) => (
-          <div key={c._id} className="bg-gray-50 p-4 rounded-xl shadow-sm">
-            {/* Direct Comment */}
-            <div className="flex items-start gap-3">
-              <img
-                src={c.userAvatar || `https://ui-avatars.com/api/?name=${c.userName}`}
-                alt={c.userName}
-                className="w-10 h-10 rounded-full object-cover"
-              />
-              <div className="flex-1">
-                <div className="flex justify-between items-center">
-                  <p className="font-semibold text-gray-800">{c.userName}</p>
-                  {user?._id === c.userId && (
+        {comments.map((c) => {
+          const liked = c.likes?.includes(user?.email);
+          return (
+            <div key={c._id} className="bg-gray-50 p-4 rounded-xl shadow-sm">
+              {/* Direct Comment */}
+              <div className="flex items-start gap-3">
+                <img
+                  src={c.userImage || `https://ui-avatars.com/api/?name=${c.userName}`}
+                  alt={c.userName}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <div className="flex-1">
+                  <div className="flex justify-between items-center">
+                    <p className="font-semibold text-gray-800">{c.userName}</p>
+                    {user?.email === c.userEmail && (
+                      <button
+                        onClick={() => handleDelete(c._id, c.userEmail)}
+                        className="text-red-500 hover:text-red-600"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-gray-700 mt-1">{c.comment}</p>
+
+                  {/* Like / Reply Buttons */}
+                  <div className="flex gap-3 mt-2 items-center">
                     <button
-                      onClick={() => handleDelete(c._id, c.userId)}
-                      className="text-red-500 hover:text-red-600"
+                      onClick={() => toggleLike(c._id)}
+                      className={`flex items-center gap-1 text-sm ${
+                        liked ? "text-red-500" : "text-gray-500"
+                      }`}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Heart className="w-4 h-4" />
+                      <span>{c.likes?.length || 0}</span>
                     </button>
-                  )}
-                </div>
-                <p className="text-gray-700 mt-1">{c.comment}</p>
 
-                {/* Like / Reply Buttons */}
-                <div className="flex gap-3 mt-2 items-center">
-                  <button
-                    onClick={() => toggleLike(c._id)}
-                    className={`flex items-center gap-1 text-sm ${
-                      c.likes?.includes(user?._id) ? "text-red-500" : "text-gray-500"
-                    }`}
-                  >
-                    <Heart className="w-4 h-4" />
-                    {c.likes?.length || 0}
-                  </button>
-
-                  <button
-                    onClick={() => setReplyOpen(c._id)}
-                    className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800"
-                  >
-                    <MessageCircle className="w-4 h-4" /> Reply
-                  </button>
-                </div>
-
-                {/* Reply input */}
-                {replyOpen === c._id && (
-                  <div className="mt-2 flex flex-col space-y-2 ml-12">
-                    <textarea
-                      value={replyText}
-                      onChange={(e) => setReplyText(e.target.value)}
-                      placeholder="Write your reply..."
-                      className="border border-gray-300 rounded-lg p-2 w-full resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                      rows={2}
-                    />
                     <button
-                      onClick={() => handleReply(c._id)}
-                      className="px-4 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
+                      onClick={() => setReplyOpen(c._id)}
+                      className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800"
                     >
-                      Reply
+                      <MessageCircle className="w-4 h-4" /> Reply
                     </button>
                   </div>
-                )}
 
-                {/* Replies */}
-                {c.replies?.map((r) => (
-                  <div
-                    key={r._id}
-                    className="flex items-start gap-3 mt-2 ml-12 bg-white p-3 rounded-lg border border-gray-200"
-                  >
-                    <img
-                      src={r.userAvatar || `https://ui-avatars.com/api/?name=${r.userName}`}
-                      alt={r.userName}
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center">
-                        <p className="font-medium text-gray-800">{r.userName}</p>
-                        {user?._id === r.userId && (
-                          <button
-                            onClick={() => handleDelete(r._id, r.userId)}
-                            className="text-red-500 hover:text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                      <p className="text-gray-700 mt-1">{r.comment}</p>
+                  {/* Reply input */}
+                  {replyOpen === c._id && (
+                    <div className="mt-2 flex flex-col space-y-2 ml-12">
+                      <textarea
+                        value={replyText}
+                        onChange={(e) => setReplyText(e.target.value)}
+                        placeholder="Write your reply..."
+                        className="border border-gray-300 rounded-lg p-2 w-full resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        rows={2}
+                      />
                       <button
-                        onClick={() => toggleLike(r._id, true)}
-                        className={`flex items-center gap-1 text-sm ${
-                          r.likes?.includes(user?._id) ? "text-red-500" : "text-gray-500"
-                        }`}
+                        onClick={() => handleReply(c._id)}
+                        className="px-4 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
                       >
-                        <Heart className="w-4 h-4" />
-                        {r.likes?.length || 0}
+                        Reply
                       </button>
                     </div>
-                  </div>
-                ))}
+                  )}
+
+                  {/* Replies */}
+                  {c.replies?.map((r) => {
+                    const replyLiked = r.likes?.includes(user?.email);
+                    return (
+                      <div
+                        key={r._id}
+                        className="flex items-start gap-3 mt-2 ml-12 bg-white p-3 rounded-lg border border-gray-200"
+                      >
+                        <img
+                          src={r.userImage || `https://ui-avatars.com/api/?name=${r.userName}`}
+                          alt={r.userName}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                        <div className="flex-1">
+                          <div className="flex justify-between items-center">
+                            <p className="font-medium text-gray-800">{r.userName}</p>
+                            {user?.email === r.userEmail && (
+                              <button
+                                onClick={() => handleDelete(r._id, r.userEmail)}
+                                className="text-red-500 hover:text-red-600"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                          <p className="text-gray-700 mt-1">{r.comment}</p>
+                          <button
+                            onClick={() => toggleLike(r._id, true)}
+                            className={`flex items-center gap-1 text-sm ${
+                              replyLiked ? "text-red-500" : "text-gray-500"
+                            }`}
+                          >
+                            <Heart className="w-4 h-4" />
+                            <span>{r.likes?.length || 0}</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
