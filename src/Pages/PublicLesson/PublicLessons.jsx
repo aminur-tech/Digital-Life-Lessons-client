@@ -25,7 +25,7 @@ const PublicLessons = () => {
   // Get all public lessons
   useEffect(() => {
     axios
-      .get("http://localhost:3000/lessons/public")
+      .get("https://digital-life-lessons-server-seven.vercel.app/lessons/public")
       .then(res => setLessons(res.data))
       .catch(err => console.error("Failed to load lessons:", err));
   }, []);
@@ -42,6 +42,7 @@ const PublicLessons = () => {
 
   return (
     <div className="my-15">
+      <title>public lesson</title>
       <h1 className="text-3xl md:text-4xl font-bold mb-15 text-center text-base-content">
         Browse Public Life Lessons
       </h1>

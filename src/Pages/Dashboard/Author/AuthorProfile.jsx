@@ -28,6 +28,7 @@ const AuthorProfile = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
+      <title>profile</title>
       {/* Author info */}
       <div className="flex flex-col md:flex-row items-center md:items-start gap-6 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 transition-colors">
         <img

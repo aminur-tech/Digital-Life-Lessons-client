@@ -58,6 +58,7 @@ const AddLesson = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-800 rounded shadow-md">
+      <title>Add lesson</title>
       <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">
         Create New Life Lesson
       </h2>

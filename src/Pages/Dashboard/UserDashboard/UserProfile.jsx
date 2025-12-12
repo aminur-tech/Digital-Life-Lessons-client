@@ -73,7 +73,7 @@ const UserProfile = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-
+<title>profile</title>
       {/* Profile Header */}
       <div className="flex items-center gap-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow relative">
 

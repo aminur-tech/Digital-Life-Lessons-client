@@ -133,6 +133,7 @@ const Card = ({ title, value, color }) => (
 // ChartCard Component using Recharts
 const ChartCard = ({ title, data, dataKey }) => (
   <div className="p-4 bg-white dark:bg-gray-800 shadow rounded text-gray-900 dark:text-gray-100">
+    <title>Dashboard</title>
     <h3 className="text-lg font-semibold mb-3">{title}</h3>
     <ResponsiveContainer width="100%" height={250}>
       <LineChart data={data}>

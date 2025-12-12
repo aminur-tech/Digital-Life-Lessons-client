@@ -22,7 +22,7 @@ const HeroSlider = () => {
       subtitle: "Improve learning skills and gather your knowledge.",
       buttonText: "Get Started",
       buttonLink: "/public-lessons",
-      bgImage: "https://i.ibb.co.com/fd6xZ9tK/compressed-3.jpg",
+      bgImage: "https://i.ibb.co.com/hxqCqXMq/ai-generated-8194612-640.jpg",
     },
     {
       title: "Build Real Lessons",

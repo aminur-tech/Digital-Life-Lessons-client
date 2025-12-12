@@ -8,10 +8,11 @@ import MostFavorite from './MostFavorite';
 const Home = () => {
     return (
         <div >
+            <title>Home</title>
             <div className='mb-20'>
                 <HeroSlider></HeroSlider>
             </div>
-            
+
             <div className='mb-20'>
                 <FeaturedLessons></FeaturedLessons>
             </div>

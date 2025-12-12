@@ -42,6 +42,7 @@ const PricingPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-4 bg-gray-100 dark:bg-gray-900 min-h-screen rounded-xl">
+      <title>pricing</title>
       <h1 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">
         Upgrade to Premium
       </h1>

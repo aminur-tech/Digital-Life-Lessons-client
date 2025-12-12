@@ -67,6 +67,7 @@ const DashboardHome = () => {
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100 transition-colors">
+      <title>Dashboard</title>
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
       {/* Stats Cards */}

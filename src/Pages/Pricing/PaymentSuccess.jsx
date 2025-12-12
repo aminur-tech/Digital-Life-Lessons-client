@@ -45,6 +45,7 @@ const PaymentSuccess = () => {
 
   return (
     <div className="p-10 bg-gray-100 dark:bg-gray-900 min-h-screen">
+      <title>payment Success</title>
       <h1 className="text-3xl font-bold text-green-600 dark:text-green-400 text-center">
         🎉 Payment Successful
       </h1>

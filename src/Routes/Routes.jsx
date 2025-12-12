@@ -5,12 +5,10 @@ import AuthLayouts from "../Layouts/AuthLayouts/AuthLayouts";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
 import Error from "../Component/Error"
-import Dashboard from "../Layouts/DashboardLayout/DashboardLayout";
 import DashboardLayout from "../Layouts/DashboardLayout/DashboardLayout";
 import DashboardHome from "../Pages/Dashboard/UserDashboard/DashboardHome";
 import AddLesson from "../Pages/Dashboard/UserDashboard/AddLesson";
 import MyLessons from "../Pages/Dashboard/UserDashboard/MyLessons";
-import UpdateLesson from "../Pages/Dashboard/UserDashboard/UpdateLesson";
 import MyFavorites from "../Pages/Dashboard/UserDashboard/MyFavorites";
 import UserProfile from "../Pages/Dashboard/UserDashboard/UserProfile";
 import AdminHome from "../Pages/Dashboard/AdminDashboard/AdminHome";
@@ -61,7 +59,6 @@ export const router = createBrowserRouter([
       { index: true, element: <DashboardHome /> },
       { path: "add-lesson", element: <AddLesson /> },
       { path: "my-lessons", element: <MyLessons /> },
-      { path: "my-lessons/update/:id", element: <UpdateLesson /> },
       { path: "my-favorites", element: <MyFavorites /> },
       { path: "profile", element: <UserProfile /> },
 

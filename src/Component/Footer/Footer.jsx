@@ -20,9 +20,7 @@ export default function Footer() {
           <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
           <ul className="space-y-2">
             <li><Link to="/" className="hover:text-blue-400">Home</Link></li>
-            <li><Link to="/about" className="hover:text-blue-400">About</Link></li>
-            <li><Link to="/courses" className="hover:text-blue-400">Courses</Link></li>
-            <li><Link to="/contact" className="hover:text-blue-400">Contact</Link></li>
+            <li><Link to="/public-lessons" className="hover:text-blue-400">public lessons</Link></li>
           </ul>
         </div>
 
@@ -40,9 +38,8 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold text-white mb-3">Follow Us</h3>
           <div className="flex items-center space-x-5">
-            <a href="#" className="hover:text-blue-400"><Facebook /></a>
-            <a href="#" className="hover:text-blue-400"><Github /></a>
-            <a href="#" className="hover:text-blue-400"><Linkedin /></a>
+            <a href="https://github.com/aminur-tech" className="hover:text-blue-400"><Github /></a>
+            <a href="https://www.linkedin.com/in/aminur-rahman4078" className="hover:text-blue-400"><Linkedin /></a>
           </div>
         </div>
       </div>

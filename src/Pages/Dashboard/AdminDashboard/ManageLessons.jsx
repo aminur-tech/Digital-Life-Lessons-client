@@ -35,6 +35,7 @@ const ManageLessons = () => {
 
   return (
     <div className="p-6">
+      <title>Manage lesson</title>
       <h2 className="text-2xl font-bold mb-4">Manage Lessons</h2>
 
       <table className="table w-full">

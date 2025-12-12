@@ -9,7 +9,6 @@ import useAuth from "../../../Hooks/useAuth";
 import { useParams } from "react-router";
 import { Eye, Clock, Calendar, Lock } from "lucide-react";
 import { Link } from "react-router";
-import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const LessonsDetails = () => {
@@ -22,7 +21,7 @@ const LessonsDetails = () => {
   const [isPremium, setIsPremium] = useState(null);
   const [visibleCount, setVisibleCount] = useState(4);
 
-  // Apply dark mode on component mount
+ 
   useEffect(() => {
     const theme = localStorage.getItem("theme") || "light";
     if (theme === "dark") {
@@ -90,6 +89,7 @@ const LessonsDetails = () => {
 
   return (
     <div className="text-gray-800 dark:text-gray-200">
+      <title>lesson details</title>
       <div className="lg:grid lg:grid-cols-3 lg:gap-10">
         {/* LEFT COLUMN */}
         <div className="lg:col-span-2 space-y-12">
