@@ -88,7 +88,7 @@ const LessonsDetails = () => {
   };
 
   return (
-    <div className="text-gray-800 dark:text-gray-200">
+    <div className="text-gray-800 dark:text-gray-200 p-1">
       <title>lesson details</title>
       <div className="lg:grid lg:grid-cols-3 lg:gap-10">
         {/* LEFT COLUMN */}
@@ -209,7 +209,7 @@ const LessonsDetails = () => {
           More Lessons You Might Like
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {similarLessons.slice(0, visibleCount).map((s) => (
             <Link
               to={`/lessons/${s._id}`}
