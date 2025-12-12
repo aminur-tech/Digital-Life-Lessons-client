@@ -44,7 +44,7 @@ const HeroSlider = () => {
     <div className="relative">
       <Slider {...settings}>
         {slides.map((slide, index) => (
-          <div key={index} className="h-[70vh] relative">
+          <div key={index} className="h-[50vh] md:h-[70vh] relative">
             <img
               src={slide.bgImage}
               alt={slide.title}
