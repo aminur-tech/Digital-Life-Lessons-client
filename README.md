@@ -5,7 +5,7 @@
 ---
 
 ## 🌐 Live Site
-[Your Live Site URL Here]
+https://digital-life-lessons-client-xi.vercel.app/
 
 ---
 
