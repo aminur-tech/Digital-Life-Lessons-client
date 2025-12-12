@@ -11,7 +11,6 @@ const Comments = ({ lessonId }) => {
   const [replyOpen, setReplyOpen] = useState(null);
   const [replyText, setReplyText] = useState("");
 
-  // Load all comments
   const loadComments = async () => {
     try {
       const res = await axiosSecure.get(`/comments/${lessonId}`);
@@ -25,14 +24,10 @@ const Comments = ({ lessonId }) => {
     loadComments();
   }, [lessonId]);
 
-  // Post a new comment
   const handleSubmit = async () => {
     if (!text.trim()) return;
     try {
-      await axiosSecure.post("/comments", {
-        lessonId,
-        comment: text,
-      });
+      await axiosSecure.post("/comments", { lessonId, comment: text });
       setText("");
       loadComments();
     } catch (err) {
@@ -40,15 +35,10 @@ const Comments = ({ lessonId }) => {
     }
   };
 
-  // Post a reply
   const handleReply = async (parentId) => {
     if (!replyText.trim()) return;
     try {
-      await axiosSecure.post("/comments", {
-        lessonId,
-        comment: replyText,
-        parentId,
-      });
+      await axiosSecure.post("/comments", { lessonId, comment: replyText, parentId });
       setReplyText("");
       setReplyOpen(null);
       loadComments();
@@ -57,7 +47,6 @@ const Comments = ({ lessonId }) => {
     }
   };
 
-  // Delete comment or reply
   const handleDelete = async (id, authorEmail) => {
     if (user?.email !== authorEmail) return;
     try {
@@ -68,7 +57,6 @@ const Comments = ({ lessonId }) => {
     }
   };
 
-  // Toggle like for comments or replies
   const toggleLike = async (id, isReply = false) => {
     try {
       await axiosSecure.post("/comments/like", { commentId: id, isReply });
@@ -81,12 +69,12 @@ const Comments = ({ lessonId }) => {
   return (
     <div className="space-y-6">
       {/* Add Comment */}
-      <div className="bg-white shadow-md rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-gray-200 dark:border-gray-700 transition-colors">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Write a comment..."
-          className="border border-gray-300 rounded-lg p-3 w-full resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="border border-gray-300 dark:border-gray-600 rounded-lg p-3 w-full resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
           rows={3}
         />
         <button
@@ -102,7 +90,7 @@ const Comments = ({ lessonId }) => {
         {comments.map((c) => {
           const liked = c.likes?.includes(user?.email);
           return (
-            <div key={c._id} className="bg-gray-50 p-4 rounded-xl shadow-sm">
+            <div key={c._id} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 transition-colors">
               {/* Direct Comment */}
               <div className="flex items-start gap-3">
                 <img
@@ -112,7 +100,7 @@ const Comments = ({ lessonId }) => {
                 />
                 <div className="flex-1">
                   <div className="flex justify-between items-center">
-                    <p className="font-semibold text-gray-800">{c.userName}</p>
+                    <p className="font-semibold text-gray-800 dark:text-gray-100">{c.userName}</p>
                     {user?.email === c.userEmail && (
                       <button
                         onClick={() => handleDelete(c._id, c.userEmail)}
@@ -122,15 +110,13 @@ const Comments = ({ lessonId }) => {
                       </button>
                     )}
                   </div>
-                  <p className="text-gray-700 mt-1">{c.comment}</p>
+                  <p className="text-gray-700 dark:text-gray-300 mt-1">{c.comment}</p>
 
                   {/* Like / Reply Buttons */}
                   <div className="flex gap-3 mt-2 items-center">
                     <button
                       onClick={() => toggleLike(c._id)}
-                      className={`flex items-center gap-1 text-sm ${
-                        liked ? "text-red-500" : "text-gray-500"
-                      }`}
+                      className={`flex items-center gap-1 text-sm ${liked ? "text-red-500" : "text-gray-500 dark:text-gray-300"}`}
                     >
                       <Heart className="w-4 h-4" />
                       <span>{c.likes?.length || 0}</span>
@@ -151,7 +137,7 @@ const Comments = ({ lessonId }) => {
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
                         placeholder="Write your reply..."
-                        className="border border-gray-300 rounded-lg p-2 w-full resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        className="border border-gray-300 dark:border-gray-600 rounded-lg p-2 w-full resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
                         rows={2}
                       />
                       <button
@@ -169,7 +155,7 @@ const Comments = ({ lessonId }) => {
                     return (
                       <div
                         key={r._id}
-                        className="flex items-start gap-3 mt-2 ml-12 bg-white p-3 rounded-lg border border-gray-200"
+                        className="flex items-start gap-3 mt-2 ml-12 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-600 transition-colors"
                       >
                         <img
                           src={r.userImage || `https://ui-avatars.com/api/?name=${r.userName}`}
@@ -178,7 +164,7 @@ const Comments = ({ lessonId }) => {
                         />
                         <div className="flex-1">
                           <div className="flex justify-between items-center">
-                            <p className="font-medium text-gray-800">{r.userName}</p>
+                            <p className="font-medium text-gray-800 dark:text-gray-100">{r.userName}</p>
                             {user?.email === r.userEmail && (
                               <button
                                 onClick={() => handleDelete(r._id, r.userEmail)}
@@ -188,12 +174,10 @@ const Comments = ({ lessonId }) => {
                               </button>
                             )}
                           </div>
-                          <p className="text-gray-700 mt-1">{r.comment}</p>
+                          <p className="text-gray-700 dark:text-gray-300 mt-1">{r.comment}</p>
                           <button
                             onClick={() => toggleLike(r._id, true)}
-                            className={`flex items-center gap-1 text-sm ${
-                              replyLiked ? "text-red-500" : "text-gray-500"
-                            }`}
+                            className={`flex items-center gap-1 text-sm ${replyLiked ? "text-red-500" : "text-gray-500 dark:text-gray-300"}`}
                           >
                             <Heart className="w-4 h-4" />
                             <span>{r.likes?.length || 0}</span>

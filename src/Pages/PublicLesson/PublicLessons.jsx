@@ -11,7 +11,7 @@ const PublicLessons = () => {
   const navigate = useNavigate();
   const [lessons, setLessons] = useState([]);
   const [userIsPremium, setUserIsPremium] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(8); // default 8 cards
+  const [visibleCount, setVisibleCount] = useState(8); 
 
   // Get user premium status
   useEffect(() => {
@@ -30,24 +30,23 @@ const PublicLessons = () => {
       .catch(err => console.error("Failed to load lessons:", err));
   }, []);
 
-  // Slice lessons to display only visibleCount
   const displayedLessons = lessons.slice(0, visibleCount);
 
   const handleSeeMore = () => {
     if (!userIsPremium) {
-      navigate("/dashboard/pricing"); // Free user redirect
+      navigate("/dashboard/pricing");
     } else {
-      setVisibleCount(prev => prev + 4); // Premium user load 4 more cards
+      setVisibleCount(prev => prev + 4);
     }
   };
 
   return (
     <div className="my-15">
-      <h1 className="text-3xl md:text-4xl font-bold mb-15 text-center text-gray-800">
+      <h1 className="text-3xl md:text-4xl font-bold mb-15 text-center text-base-content">
         Browse Public Life Lessons
       </h1>
 
-      <div className="grid grid-cols-1  md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {displayedLessons.map(lesson => {
           const isPremiumLesson = lesson.accessLevel?.toLowerCase() === "premium";
           const isPrivateLesson = lesson.privacy?.toLowerCase() === "private";
@@ -57,7 +56,7 @@ const PublicLessons = () => {
           return (
             <div
               key={lesson._id}
-              className={`relative bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-xl ${locked ? "opacity-80" : ""}`}
+              className={`relative bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden transition hover:shadow-xl ${locked ? "opacity-80" : ""}`}
             >
               {/* LOCK OVERLAY */}
               {locked && (
@@ -97,12 +96,12 @@ const PublicLessons = () => {
 
               {/* CONTENT */}
               <div className={`p-4 ${locked ? "blur-sm" : ""}`}>
-                <h2 className="text-lg font-semibold mb-1 text-gray-800">
+                <h2 className="text-lg font-semibold mb-1 text-gray-800 dark:text-gray-100">
                   {lesson.title}
                 </h2>
 
-                <p className="text-gray-600 text-sm mb-3">
-                  {lesson.description.slice(0, 70)}...}
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                  {lesson.description.slice(0, 70)}...
                 </p>
 
                 {/* CREATOR INFO */}
@@ -110,22 +109,26 @@ const PublicLessons = () => {
                   <img
                     src={lesson.author_Img}
                     alt={lesson.author_Name}
-                    className="w-9 h-9 rounded-full object-cover border border-gray-200"
+                    className="w-9 h-9 rounded-full object-cover border border-gray-200 dark:border-gray-700"
                   />
                   <div>
-                    <p className="text-sm font-medium text-gray-800">{lesson.author_Name}</p>
-                    <p className="text-xs text-gray-400">{new Date(lesson.createdAt).toLocaleDateString()}</p>
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                      {lesson.author_Name}
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-400">
+                      {new Date(lesson.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
 
                 {/* ACCESS LEVEL */}
                 <div className="mb-3">
                   {isPremiumLesson ? (
-                    <span className="flex items-center gap-1 text-red-500 text-sm font-semibold">
+                    <span className="flex items-center gap-1 text-red-500 dark:text-red-400 text-sm font-semibold">
                       <Lock className="w-4 h-4" /> Premium
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-green-600 text-sm font-semibold">
+                    <span className="flex items-center gap-1 text-green-600 dark:text-green-400 text-sm font-semibold">
                       <Unlock className="w-4 h-4" /> Free
                     </span>
                   )}
@@ -134,7 +137,7 @@ const PublicLessons = () => {
                 {/* SEE DETAILS BUTTON */}
                 <Link
                   to={locked ? (isPremiumLesson ? "/dashboard/pricing" : `/lessons/${lesson._id}`) : `/lessons/${lesson._id}`}
-                  className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition"
+                  className="block w-full text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 rounded transition"
                 >
                   See Details
                 </Link>
@@ -149,7 +152,7 @@ const PublicLessons = () => {
         <div className="flex justify-center mt-6">
           <button
             onClick={handleSeeMore}
-            className="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition"
+            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded transition"
           >
             See More
           </button>

@@ -36,13 +36,11 @@ const AdminHome = () => {
         const lessons = lessonsRes.data;
         const reports = reportsRes.data;
 
-        // Today's new lessons
         const today = new Date().toDateString();
         const newLessonsToday = lessons.filter(
           (l) => new Date(l.createdAt).toDateString() === today
         ).length;
 
-        // Most active contributors
         const contributorMap = {};
         lessons.forEach((lesson) => {
           contributorMap[lesson.email] = (contributorMap[lesson.email] || 0) + 1;
@@ -61,12 +59,10 @@ const AdminHome = () => {
           mostActiveContributors: sortedContributors,
         });
 
-        // Prepare data for growth charts (example: last 7 days)
         const last7Days = Array.from({ length: 7 }, (_, i) => {
           const date = new Date();
           date.setDate(date.getDate() - i);
-          const dateStr = date.toISOString().split("T")[0];
-          return dateStr;
+          return date.toISOString().split("T")[0];
         }).reverse();
 
         const lessonGrowthData = last7Days.map((day) => ({
@@ -94,7 +90,7 @@ const AdminHome = () => {
   }, [axiosSecure]);
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -106,9 +102,12 @@ const AdminHome = () => {
 
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-3">Most Active Contributors</h2>
-        <ul className="bg-white shadow rounded p-4">
+        <ul className="bg-white dark:bg-gray-800 shadow rounded p-4">
           {stats.mostActiveContributors.map((c) => (
-            <li key={c.email} className="py-1 border-b last:border-b-0">
+            <li
+              key={c.email}
+              className="py-1 border-b last:border-b-0 border-gray-200 dark:border-gray-700"
+            >
               <span className="font-medium">{c.email}</span> - {c.count} lessons
             </li>
           ))}
@@ -133,14 +132,17 @@ const Card = ({ title, value, color }) => (
 
 // ChartCard Component using Recharts
 const ChartCard = ({ title, data, dataKey }) => (
-  <div className="p-4 bg-white shadow rounded">
+  <div className="p-4 bg-white dark:bg-gray-800 shadow rounded text-gray-900 dark:text-gray-100">
     <h3 className="text-lg font-semibold mb-3">{title}</h3>
     <ResponsiveContainer width="100%" height={250}>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
+        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+        <XAxis dataKey="date" stroke="#8884d8" />
+        <YAxis stroke="#8884d8" />
+        <Tooltip
+          contentStyle={{ backgroundColor: '#fff', color: '#000' }}
+          wrapperStyle={{ borderRadius: '8px' }}
+        />
         <Line type="monotone" dataKey={dataKey} stroke="#8884d8" strokeWidth={2} />
       </LineChart>
     </ResponsiveContainer>

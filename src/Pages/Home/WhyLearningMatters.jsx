@@ -26,12 +26,12 @@ const WhyLearningMatters = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-gray-100">
           Why Learning From Life Matters
         </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto mb-12">
+        <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">
           Understanding and sharing life lessons helps you grow, stay motivated, and build a better future.
         </p>
 
@@ -39,11 +39,13 @@ const WhyLearningMatters = () => {
           {benefits.map((item, index) => (
             <div
               key={index}
-              className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition"
+              className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition"
             >
               <div className="flex justify-center mb-4">{item.icon}</div>
-              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-              <p className="text-gray-600">{item.desc}</p>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+                {item.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">{item.desc}</p>
             </div>
           ))}
         </div>

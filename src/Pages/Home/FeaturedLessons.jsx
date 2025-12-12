@@ -10,7 +10,7 @@ const FeaturedLessons = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [userIsPremium, setUserIsPremium] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(4); 
+  const [visibleCount, setVisibleCount] = useState(4);
 
   // Fetch featured lessons
   const { data: featured = [] } = useQuery({
@@ -32,21 +32,19 @@ const FeaturedLessons = () => {
       .catch(err => console.error(err));
   }, [user, axiosSecure]);
 
-  // Only show visibleCount number of lessons
   const displayedLessons = featured.slice(0, visibleCount);
 
-  // Handle See More button click
   const handleSeeMore = () => {
     if (!userIsPremium) {
-      navigate("/dashboard/pricing"); // free users redirected
+      navigate("/dashboard/pricing");
     } else {
-      setVisibleCount(prev => prev + 4); // premium users load 4 more
+      setVisibleCount(prev => prev + 4);
     }
   };
 
   return (
     <div className="my-10">
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+      <h2 className="text-3xl font-bold mb-6 text-center text-base-content">
         🌟 Featured Life Lessons
       </h2>
 
@@ -58,7 +56,10 @@ const FeaturedLessons = () => {
           return (
             <div
               key={lesson._id}
-              className={`relative bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-xl ${locked ? "opacity-80" : ""}`}
+              className={`relative rounded-xl shadow-md  transition overflow-hidden hover:shadow-xl
+                          ${locked ? "opacity-80" : ""}
+                           bg-white dark:bg-gray-800
+                           text-gray-900 dark:text-gray-100`}
             >
               {/* LOCK OVERLAY */}
               {locked && (
@@ -76,7 +77,7 @@ const FeaturedLessons = () => {
 
               {/* CATEGORY */}
               <div className="absolute top-2 left-2 z-10">
-                <span className="bg-blue-400 text-white px-2 py-1 rounded-2xl text-xs font-semibold">
+                <span className="bg-blue-400 dark:bg-blue-600 text-white px-2 py-1 rounded-2xl text-xs font-semibold">
                   {lesson.category || "Lesson"}
                 </span>
               </div>
@@ -92,19 +93,27 @@ const FeaturedLessons = () => {
 
               {/* CONTENT */}
               <div className={`p-4 ${locked ? "blur-sm" : ""}`}>
-                <h3 className="text-lg font-semibold mb-1 line-clamp-2 text-gray-800">{lesson.title}</h3>
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{lesson.description.slice(0, 100)}...</p>
+                <h3 className="text-lg font-semibold mb-1 line-clamp-2 text-gray-800 dark:text-gray-100">
+                  {lesson.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
+                  {lesson.description.slice(0, 100)}...
+                </p>
 
                 {/* CREATOR INFO */}
                 <div className="flex items-center gap-3 mb-3">
                   <img
                     src={lesson.author_Img}
                     alt={lesson.author_Name}
-                    className="w-9 h-9 rounded-full object-cover border border-gray-200"
+                    className="w-9 h-9 rounded-full object-cover border border-gray-200 dark:border-gray-600"
                   />
                   <div>
-                    <p className="text-sm font-medium text-gray-800">{lesson.author_Name}</p>
-                    <p className="text-xs text-gray-400">{new Date(lesson.createdAt).toLocaleDateString()}</p>
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                      {lesson.author_Name}
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-400">
+                      {new Date(lesson.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
 
@@ -115,7 +124,7 @@ const FeaturedLessons = () => {
                       <Lock className="w-4 h-4" /> Premium
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-green-600 text-sm font-semibold">
+                    <span className="flex items-center gap-1 text-green-600 dark:text-green-400 text-sm font-semibold">
                       <Unlock className="w-4 h-4" /> Free
                     </span>
                   )}
@@ -124,7 +133,7 @@ const FeaturedLessons = () => {
                 {/* SEE DETAILS BUTTON */}
                 <Link
                   to={locked ? "/dashboard/pricing" : `/lessons/${lesson._id}`}
-                  className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition"
+                  className="block w-full text-center bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold py-2 rounded transition"
                 >
                   See Details
                 </Link>
@@ -139,7 +148,7 @@ const FeaturedLessons = () => {
         <div className="flex justify-center mt-6">
           <button
             onClick={handleSeeMore}
-            className="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition"
+            className="px-6 py-2 bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold rounded transition"
           >
             See More
           </button>

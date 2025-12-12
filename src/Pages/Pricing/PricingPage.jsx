@@ -7,23 +7,24 @@ const PricingPage = () => {
   const { user: authUser } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  // Fetch user from backend
   const { data: user = {}, isLoading, isError } = useQuery({
     queryKey: ['user', authUser?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/premium/${authUser.email}`);
-      // console.log(res.data)
       return res.data;
     },
     enabled: !!authUser?.email
   });
 
-  if (!authUser) return <p className="text-center mt-20">Please log in to see pricing.</p>;
-  if (isLoading) return <p className="text-center mt-20">Loading...</p>;
-  if (isError) return <p className="text-center mt-20">Failed to load user data.</p>;
+  if (!authUser)
+    return <p className="text-center mt-20 text-gray-700 dark:text-gray-300">Please log in to see pricing.</p>;
+  if (isLoading)
+    return <p className="text-center mt-20 text-gray-700 dark:text-gray-300">Loading...</p>;
+  if (isError)
+    return <p className="text-center mt-20 text-red-500 dark:text-red-400">Failed to load user data.</p>;
 
   if (user?.isPremium) {
-    return <p className="text-center mt-20 text-yellow-500">🌟 You are already Premium!</p>;
+    return <p className="text-center mt-20 text-yellow-500 dark:text-yellow-400">🌟 You are already Premium!</p>;
   }
 
   const handleUpgrade = async () => {
@@ -32,7 +33,7 @@ const PricingPage = () => {
         userId: authUser._id,
         email: authUser.email
       });
-      window.location.href = res.data.url; // Redirect to Stripe Checkout
+      window.location.href = res.data.url;
     } catch (err) {
       console.error('Stripe checkout error:', err);
       alert('Failed to initiate payment. Please try again.');
@@ -40,11 +41,13 @@ const PricingPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-4">
-      <h1 className="text-3xl font-bold text-center mb-6">Upgrade to Premium</h1>
+    <div className="max-w-4xl mx-auto mt-10 p-4 bg-gray-100 dark:bg-gray-900 min-h-screen rounded-xl">
+      <h1 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">
+        Upgrade to Premium
+      </h1>
 
-      <table className="table-auto w-full border border-gray-200 mb-6">
-        <thead>
+      <table className="table-auto w-full border border-gray-200 dark:border-gray-700 mb-6 text-gray-800 dark:text-gray-200">
+        <thead className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
           <tr>
             <th className="border px-4 py-2">Feature</th>
             <th className="border px-4 py-2">Free</th>
@@ -88,7 +91,7 @@ const PricingPage = () => {
       <div className="text-center">
         <button
           onClick={handleUpgrade}
-          className="btn btn-primary rounded-xl px-6 py-2 text-white"
+          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 transition"
         >
           Upgrade to Premium (৳1500)
         </button>

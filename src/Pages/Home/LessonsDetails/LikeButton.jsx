@@ -41,11 +41,11 @@ const LikeButton = ({ lessonId, initialLiked = false, initialCount = 0 }) => {
       onClick={handleToggle}
       disabled={loading}
       className={`flex items-center justify-center gap-2 px-4 py-2 rounded-full font-medium transition
-        bg-gray-100 hover:bg-gray-200
+        bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600
         ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
     >
-      <BiLike size={20} className={liked ? "text-green-800 " : "text-gray-700"} />
-      <span className="text-gray-900">{likesCount}</span>
+      <BiLike size={20} className={liked ? "text-green-800 dark:text-green-400" : "text-gray-700 dark:text-gray-300"} />
+      <span className="text-gray-900 dark:text-gray-100">{likesCount}</span>
     </button>
   );
 };
